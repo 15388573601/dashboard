@@ -131,7 +131,7 @@ body {
     <div class="header">
         <h1>零满多 · 9月营销活动数据看板</h1>
         <div class="subtitle">康师傅福利券 ｜ 小程序销售（含月饼预售）｜ 抖音来客</div>
-        <div class="update-time">数据更新时间：2026-09-10 15:55 ｜ 数据源：9月品牌部数据（月累计）</div>
+        <div class="update-time">数据更新时间：2026-09-10 16:12 ｜ 数据源：9月品牌部数据（月累计）</div>
     </div>
 
     <div class="nav">
@@ -548,26 +548,6 @@ body {
             <div class="m"><span class="ml">新客金额</span><span class="mv">¥25,966.50</span></div>
             <div class="m"><span class="ml">券均单价</span><span class="mv">¥109.1</span></div>
         </div>
-    </div><div class="cat-card" style="border-top: 3px solid #c2410c; background: #fff7ed;">
-        <div class="cat-head">
-            <span class="cat-name" style="color:#c2410c">品牌代金券</span>
-            <span class="cat-count">2 个 SKU</span>
-        </div>
-        <div class="cat-metrics">
-            <div class="m"><span class="ml">成交券数</span><span class="mv">14 张</span></div>
-            <div class="m"><span class="ml">成交金额</span><span class="mv">¥680</span></div>
-            <div class="m"><span class="ml">核销券数</span><span class="mv">12 张</span></div>
-            <div class="m"><span class="ml">核销金额</span><span class="mv">¥590</span></div>
-            <div class="m"><span class="ml">核销率</span><span class="mv">85.7%</span></div>
-            <div class="m"><span class="ml">退款券数</span><span class="mv">7 张</span></div>
-            <div class="m"><span class="ml">退款金额</span><span class="mv">¥320</span></div>
-            <div class="m"><span class="ml">退款率</span><span class="mv">50.0%</span></div>
-            <div class="m"><span class="ml">访问人数</span><span class="mv">3120 人</span></div>
-            <div class="m"><span class="ml">转化率</span><span class="mv">0.4%</span></div>
-            <div class="m"><span class="ml">新客成交</span><span class="mv">112 人</span></div>
-            <div class="m"><span class="ml">新客金额</span><span class="mv">¥7,700</span></div>
-            <div class="m"><span class="ml">券均单价</span><span class="mv">¥48.6</span></div>
-        </div>
     </div><div class="cat-card" style="border-top: 3px solid #0f766e; background: #ecfeff;">
         <div class="cat-head">
             <span class="cat-name" style="color:#0f766e">团购</span>
@@ -618,7 +598,7 @@ body {
             
             <div class="chart-card dy">
                 <div class="chart-title">商品成交 / 核销 / 退款金额 TOP20
-                    <span class="chart-sub-note">代金券/品牌代金券/团购/零售品 ｜已剔除 6 个仅历史退款的商品</span>
+                    <span class="chart-sub-note">代金券/团购/零售品 ｜已剔除 6 个仅历史退款的商品</span>
                 </div>
                 <div id="dyItemChart" class="chart" style="height: 610px;"></div>
             </div>
@@ -979,16 +959,16 @@ dyCatChart.setOption({
     } },
     legend: { data: ['成交金额', '核销金额', '退款金额'], top: 0 },
     grid: { left: '3%', right: '6%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: ["代金券", "品牌代金券", "团购", "零售品"] },
+    xAxis: { type: 'category', data: ["代金券", "团购", "零售品"] },
     yAxis: { type: 'value', name: '金额（元）' },
     series: [
-        { name: '成交金额', type: 'bar', data: [45590.0, 680.0, 31436.1, 6441.9], barWidth: '20%',
+        { name: '成交金额', type: 'bar', data: [45590.0, 31436.1, 6441.9], barWidth: '20%',
           itemStyle: { color: '#111827', borderRadius: [4, 4, 0, 0] },
           label: { show: true, position: 'top', formatter: '¥{c}' } },
-        { name: '核销金额', type: 'bar', data: [13607.8, 590.0, 20937.8, 3315.1], barWidth: '20%',
+        { name: '核销金额', type: 'bar', data: [13607.8, 20937.8, 3315.1], barWidth: '20%',
           itemStyle: { color: '#10b981', borderRadius: [4, 4, 0, 0] },
           label: { show: true, position: 'top', formatter: '¥{c}' } },
-        { name: '退款金额', type: 'bar', data: [17358.2, 320.0, 18120.44, 3674.1], barWidth: '20%',
+        { name: '退款金额', type: 'bar', data: [17358.2, 18120.44, 3674.1], barWidth: '20%',
           itemStyle: { color: '#ef4444', borderRadius: [4, 4, 0, 0] },
           label: { show: true, position: 'top', formatter: '¥{c}' } }
     ]
@@ -1012,12 +992,12 @@ dyItemChart.setOption({
         { name: '成交金额', type: 'bar', data: [{"value": 135.0, "name": "杂粮蛋30枚", "qty": 6, "cat": "团购"}, {"value": 158.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 159.2, "name": "鲜鸡蛋30枚居家必备", "qty": 8, "cat": "团购"}, {"value": 192.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 195.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 196.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 245.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 538.0, "name": "杂粮蛋30枚家庭厨房囤货必备", "qty": 24, "cat": "零售品"}, {"value": 600.0, "name": "50元代金券", "qty": 12, "cat": "品牌代金券"}, {"value": 943.8, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 1168.2, "name": "百事可乐六连包听装330ml", "qty": 118, "cat": "团购"}, {"value": 1498.6, "name": "青岛全麦白啤听装500ml*2露营野餐烧烤夜宵观赛双人小聚易拉罐啤酒", "qty": 127, "cat": "团购"}, {"value": 1782.0, "name": "果子熟了茶系列500ml*3", "qty": 180, "cat": "团购"}, {"value": 1914.0, "name": "家小美亲肤柔韧无芯卷纸14卷2000g家常备", "qty": 132, "cat": "团购"}, {"value": 3732.3, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 5692.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 7968.9, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 11117.7, "name": "橙味听装330ml*6连罐", "qty": 1123, "cat": "团购"}, {"value": 18648.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 26752.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
           itemStyle: {
               borderRadius: [0, 4, 4, 0],
-              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); }
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed'); }
           } },
         { name: '核销金额', type: 'bar', data: [{"value": 45.0, "name": "杂粮蛋30枚", "qty": 6, "cat": "团购"}, {"value": 0.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 196.0, "name": "鲜鸡蛋30枚居家必备", "qty": 8, "cat": "团购"}, {"value": 53.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 0.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 45.0, "name": "杂粮蛋30枚家庭厨房囤货必备", "qty": 24, "cat": "零售品"}, {"value": 550.0, "name": "50元代金券", "qty": 12, "cat": "品牌代金券"}, {"value": 343.2, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 1157.3, "name": "百事可乐六连包听装330ml", "qty": 118, "cat": "团购"}, {"value": 1239.0, "name": "青岛全麦白啤听装500ml*2露营野餐烧烤夜宵观赛双人小聚易拉罐啤酒", "qty": 127, "cat": "团购"}, {"value": 1534.5, "name": "果子熟了茶系列500ml*3", "qty": 180, "cat": "团购"}, {"value": 1768.0, "name": "家小美亲肤柔韧无芯卷纸14卷2000g家常备", "qty": 132, "cat": "团购"}, {"value": 2445.3, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 3512.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 4576.2, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 6256.8, "name": "橙味听装330ml*6连罐", "qty": 1123, "cat": "团购"}, {"value": 3024.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 9328.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
           itemStyle: {
               borderRadius: [0, 4, 4, 0],
-              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); }
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed'); }
           } },
         { name: '退款金额', type: 'bar', data: [112.5, 158.0, 19.9, 139.0, 39.0, 147.0, 196.0, 540.0, 200.0, 343.2, 316.8, 283.2, 543.5, 971.5, 557.7, 2820.5, 4576.2, 5716.2, 4368.0, 8536.0], barWidth: '26%',
           itemStyle: { color: '#ef4444', borderRadius: [0, 4, 4, 0] } }
@@ -1067,10 +1047,10 @@ dyZyItemChart.setOption({
     series: [
         { name: '成交金额', type: 'bar', data: [{"value": 111.2, "name": "德懋恭单色水晶饼500g", "qty": 4, "cat": "零售品"}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 2, "cat": "零售品"}, {"value": 158.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 192.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 195.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 196.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 294.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 6, "cat": "零售品"}, {"value": 943.8, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 3946.8, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 92, "cat": "零售品"}, {"value": 6666.0, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 404, "cat": "团购"}, {"value": 8836.8, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 112, "cat": "团购"}, {"value": 20160.0, "name": "200元代金券", "qty": 120, "cat": "代金券"}, {"value": 29656.0, "name": "100元代金券", "qty": 337, "cat": "代金券"}], barWidth: '26%',
           itemStyle: { borderRadius: [0, 4, 4, 0],
-              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); } } },
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed'); } } },
         { name: '核销金额', type: 'bar', data: [{"value": 0.0, "name": "德懋恭单色水晶饼500g", "qty": 4, "cat": "零售品"}, {"value": 0.0, "name": "米旗花好月圆450g", "qty": 2, "cat": "零售品"}, {"value": 0.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 53.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 0.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 49.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 6, "cat": "零售品"}, {"value": 343.2, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 2531.1, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 92, "cat": "零售品"}, {"value": 3727.0, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 404, "cat": "团购"}, {"value": 4655.1, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 112, "cat": "团购"}, {"value": 3192.0, "name": "200元代金券", "qty": 120, "cat": "代金券"}, {"value": 11264.0, "name": "100元代金券", "qty": 337, "cat": "代金券"}], barWidth: '26%',
           itemStyle: { borderRadius: [0, 4, 4, 0],
-              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); } } },
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed'); } } },
         { name: '退款金额', type: 'bar', data: [{"value": 55.6, "name": "德懋恭单色水晶饼500g", "qty": 4, "cat": "零售品"}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 2, "cat": "零售品"}, {"value": 158.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 139.0, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 39.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 147.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 196.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 6, "cat": "零售品"}, {"value": 343.2, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 686.4, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 92, "cat": "零售品"}, {"value": 3513.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 404, "cat": "团购"}, {"value": 5049.6, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 112, "cat": "团购"}, {"value": 4536.0, "name": "200元代金券", "qty": 120, "cat": "代金券"}, {"value": 9504.0, "name": "100元代金券", "qty": 337, "cat": "代金券"}], barWidth: '26%',
           itemStyle: { color: '#ef4444', borderRadius: [0, 4, 4, 0] } }
     ]
