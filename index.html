@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9月营销活动数据看板</title>
+<script src="./echarts.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f7fa; color: #1f2937; line-height: 1.6;
+}
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+.header {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 55%, #e8a33d 100%);
+    color: white; padding: 30px 32px; border-radius: 16px; margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(255,107,53,0.25);
+}
+.header h1 { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+.header .subtitle { font-size: 15px; opacity: 0.95; }
+.header .update-time { font-size: 13px; opacity: 0.85; margin-top: 10px; }
+.nav { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+.nav a {
+    display: inline-block; padding: 8px 18px; border-radius: 20px; font-size: 14px;
+    text-decoration: none; background: white; color: #374151;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s;
+}
+.nav a:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.12); }
+.nav a .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.dot.cf { background: #ff6b35; }
+.dot.xc { background: #d97706; }
+.dot.dy { background: #111827; }
+.section { margin-bottom: 28px; }
+.section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.section-head .badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 34px; height: 34px; padding: 0 8px; border-radius: 10px;
+    font-size: 14px; font-weight: 700; color: #fff;
+}
+.badge.cf { background: #ff6b35; }
+.badge.xc { background: #d97706; }
+.badge.dy { background: #111827; }
+.section-head h2 { font-size: 20px; color: #111827; }
+.section-head .meta { font-size: 13px; color: #6b7280; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.kpi-card {
+    background: white; border-radius: 12px; padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid #ff6b35; transition: transform 0.2s;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.kpi-card.amber { border-left-color: #d97706; }
+.kpi-card.blue { border-left-color: #3b82f6; }
+.kpi-card.green { border-left-color: #10b981; }
+.kpi-card.red { border-left-color: #ef4444; }
+.kpi-card.purple { border-left-color: #8b5cf6; }
+.kpi-card.slate { border-left-color: #111827; }
+.kpi-label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
+.kpi-value { font-size: 25px; font-weight: 700; color: #111827; }
+.kpi-unit { font-size: 13px; color: #6b7280; margin-left: 4px; }
+.kpi-note { font-size: 12px; color: #9ca3af; margin-top: 5px; }
+.sub-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.sub-kpi .box {
+    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 12px 16px;
+}
+.sub-kpi .box .t { font-size: 12px; color: #9a3412; }
+.sub-kpi .box .v { font-size: 19px; font-weight: 700; color: #7c2d12; }
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; margin-bottom: 18px; }
+.cat-card { border-radius: 12px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.cat-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #d1d5db; }
+.cat-name { font-size: 17px; font-weight: 700; }
+.cat-count { font-size: 12px; color: #6b7280; margin-left: auto; }
+.cat-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px 12px; }
+.cat-metrics .m { display: flex; flex-direction: column; gap: 2px; }
+.cat-metrics .ml { font-size: 11px; color: #6b7280; }
+.cat-metrics .mv { font-size: 15px; font-weight: 700; color: #111827; }
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; margin-bottom: 20px; }
+.chart-card { background: white; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.chart-card.full { grid-column: 1 / -1; }
+.chart-title {
+    font-size: 15px; font-weight: 600; color: #374151; margin-bottom: 14px;
+    padding-left: 10px; border-left: 3px solid #ff6b35;
+}
+.chart-card.xc .chart-title { border-left-color: #d97706; }
+.chart-card.dy .chart-title { border-left-color: #111827; }
+.chart-sub-note { float: right; font-size: 12px; font-weight: 400; color: #9ca3af; padding-right: 4px; }
+.sub-head { display: flex; align-items: center; gap: 10px; margin: 24px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e5e7eb; }
+.sub-no { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; padding: 0 8px; border-radius: 8px; background: #111827; color: #fff; font-size: 14px; font-weight: 700; }
+.sub-no.zy { background: #d97706; }
+.sub-head h3 { font-size: 17px; color: #111827; }
+.sub-head .meta { font-size: 13px; color: #6b7280; margin-left: auto; text-align: right; }
+.kpi-grid.compact { gap: 12px; margin-bottom: 16px; }
+.kpi-grid.compact .kpi-card { padding: 14px 16px; }
+.kpi-grid.compact .kpi-value { font-size: 21px; }
+.chart { width: 100%; height: 320px; }
+.chart.tall { height: 400px; }
+.chart.xtall { height: 520px; }
+.pending {
+    background: white; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px dashed #d1d5db; color: #6b7280; font-size: 14px; text-align: center; padding: 40px 20px;
+}
+.pending b { color: #374151; }
+.owner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 12px; margin-top: 6px; }
+.owner-block { background: #fafbfc; border-radius: 10px; padding: 12px 14px; border: 1px solid #e5e7eb; }
+.owner-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.owner-name { font-size: 15px; font-weight: 700; color: #111827; }
+.owner-rate { font-size: 18px; font-weight: 700; color: #3b82f6; }
+.owner-meta { font-size: 12px; color: #6b7280; margin-left: auto; }
+.owner-meta b { color: #111827; font-weight: 600; }
+.store-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 14px; font-size: 12px; line-height: 1.5; white-space: nowrap; }
+.chip.used { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.chip.claimed { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.chip.none { background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; }
+.chip i { font-style: normal; margin-left: 4px; opacity: 0.75; font-size: 11px; }
+.store-list { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.sl-group { font-size: 13px; color: #374151; line-height: 1.7; }
+.sl-owner { font-weight: 600; color: #111827; margin-right: 4px; }
+.sl-store { display: inline-block; padding: 2px 8px; border-radius: 4px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 12.5px; }
+@media (max-width: 768px) {
+    .chart-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 20px; }
+    .kpi-value { font-size: 22px; }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>零满多 · 9月营销活动数据看板</h1>
+        <div class="subtitle">康师傅福利券 ｜ 小程序销售（含月饼预售）｜ 抖音来客</div>
+        <div class="update-time">数据更新时间：2026-09-09 18:36 ｜ 数据源：9月品牌部数据（月累计）</div>
+    </div>
+
+    <div class="nav">
+        <a href="#sec-cf"><span class="dot cf"></span>一｜康师傅福利券</a>
+        <a href="#sec-xc"><span class="dot xc"></span>二｜小程序销售</a>
+        <a href="#sec-dy"><span class="dot dy"></span>三｜抖音</a>
+    </div>
+
+    <!-- ============ 板块一：康师傅券 ============ -->
+    <div class="section" id="sec-cf">
+        <div class="section-head">
+            <span class="badge cf">一</span>
+            <h2>康师傅老母鸡桶面107g福利券</h2>
+            <span class="meta">会员每人限领一次 ｜ 统计区间 09-01 ~ 09-09</span>
+        </div>
+        <div class="kpi-grid">
+            <div class="kpi-card blue">
+                <div class="kpi-label">活动总限量</div>
+                <div class="kpi-value">2400<span class="kpi-unit">张</span></div>
+                <div class="kpi-note">本次营销活动总投放预算</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">已发放</div>
+                <div class="kpi-value">2140<span class="kpi-unit">张</span></div>
+                <div class="kpi-note">发放进度 89.2%（占限量）</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">剩余可发</div>
+                <div class="kpi-value">260<span class="kpi-unit">张</span></div>
+                <div class="kpi-note">占限量 10.8%</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">已核销</div>
+                <div class="kpi-value">1356<span class="kpi-unit">张</span></div>
+                <div class="kpi-note">核销率 63.4% ｜ 占限量 56.5%</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">核销门店</div>
+                <div class="kpi-value">77<span class="kpi-unit">家</span></div>
+                <div class="kpi-note">已使用 1356 张 ｜ 未使用 784 张</div>
+            </div>
+        </div>
+        <div class="chart-grid">
+            <div class="chart-card">
+                <div class="chart-title">活动转化漏斗（限量 → 发放 → 核销）</div>
+                <div id="funnelChart" class="chart"></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">发放券核销状态（共 2140 张）</div>
+                <div id="cfStatusChart" class="chart"></div>
+            </div>
+            <div class="chart-card full">
+                <div class="chart-title">每日领取 / 核销趋势
+                    <span class="chart-sub-note"></span>
+                </div>
+                <div id="cfDayChart" class="chart"></div>
+            </div>
+            <div class="chart-card full">
+                <div class="chart-title">督导 × 门店核销明细
+                    <span class="chart-sub-note"><span style="color:#065f46">●</span>核销过 <span style="color:#9ca3af">●</span>未参与 ｜ 对照取自《会员拉新数据》九月预设</span>
+                </div>
+                <div class="owner-grid"><div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">段磊</span>
+            <span class="owner-rate">100.0%</span>
+            <span class="owner-meta">分管 <b>9</b> 家 · 已核销 <b>9</b> 家 · 未核销 <b>0</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多万科城市之光店｜领取31张·核销31张">万科城市之光店<i>31核销</i></span>
+<span class="chip used" title="零满多华胥镇店｜领取29张·核销29张">华胥镇店<i>29核销</i></span>
+<span class="chip used" title="零满多蓝田前卫镇店｜领取27张·核销27张">蓝田前卫镇店<i>27核销</i></span>
+<span class="chip used" title="零满多长安西路店｜领取26张·核销26张">长安西路店<i>26核销</i></span>
+<span class="chip used" title="零满多枫林绿洲店｜领取24张·核销24张">枫林绿洲店<i>24核销</i></span>
+<span class="chip used" title="零满多阳光城丽兹公馆店｜领取22张·核销22张">阳光城丽兹公馆店<i>22核销</i></span>
+<span class="chip used" title="零满多永松路店｜领取20张·核销20张">永松路店<i>20核销</i></span>
+<span class="chip used" title="零满多太阳城店｜领取11张·核销11张">太阳城店<i>11核销</i></span>
+<span class="chip used" title="零满多江林新城店｜领取2张·核销2张">江林新城店<i>2核销</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">李亚兵</span>
+            <span class="owner-rate">100.0%</span>
+            <span class="owner-meta">分管 <b>2</b> 家 · 已核销 <b>2</b> 家 · 未核销 <b>0</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多渭南仓程路店｜领取32张·核销32张">渭南仓程路店<i>32核销</i></span>
+<span class="chip used" title="零满多渭南高新万达店｜领取30张·核销30张">渭南高新万达店<i>30核销</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">高雅静</span>
+            <span class="owner-rate">90.9%</span>
+            <span class="owner-meta">分管 <b>11</b> 家 · 已核销 <b>10</b> 家 · 未核销 <b>1</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多杜永村店｜领取80张·核销80张">杜永村店<i>80核销</i></span>
+<span class="chip used" title="零满多安化门店｜领取71张·核销71张">安化门店<i>71核销</i></span>
+<span class="chip used" title="零满多兴隆鑫苑店｜领取62张·核销62张">兴隆鑫苑店<i>62核销</i></span>
+<span class="chip used" title="零满多紫薇西棠店｜领取43张·核销43张">紫薇西棠店<i>43核销</i></span>
+<span class="chip used" title="零满多中航华府店｜领取23张·核销23张">中航华府店<i>23核销</i></span>
+<span class="chip used" title="零满多南沈新苑店｜领取20张·核销20张">南沈新苑店<i>20核销</i></span>
+<span class="chip used" title="零满多甘家寨店｜领取20张·核销20张">甘家寨店<i>20核销</i></span>
+<span class="chip used" title="零满多昆明池路店｜领取13张·核销13张">昆明池路店<i>13核销</i></span>
+<span class="chip used" title="零满多上塔坡店｜领取9张·核销9张">上塔坡店<i>9核销</i></span>
+<span class="chip used" title="零满多西安宸院店｜领取3张·核销3张">西安宸院店<i>3核销</i></span>
+<span class="chip none" title="零满多外国语大学店｜未参与">外国语大学店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">张金颖</span>
+            <span class="owner-rate">85.7%</span>
+            <span class="owner-meta">分管 <b>7</b> 家 · 已核销 <b>6</b> 家 · 未核销 <b>1</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多锦绣秦川店｜领取19张·核销19张">锦绣秦川店<i>19核销</i></span>
+<span class="chip used" title="零满多咸阳聆水居店｜领取14张·核销14张">咸阳聆水居店<i>14核销</i></span>
+<span class="chip used" title="零满多亿鑫阳光庭院｜领取10张·核销10张">亿鑫阳光庭院<i>10核销</i></span>
+<span class="chip used" title="零满多沣太花园店｜领取9张·核销9张">沣太花园店<i>9核销</i></span>
+<span class="chip used" title="零满多御河宸院店｜领取7张·核销7张">御河宸院店<i>7核销</i></span>
+<span class="chip used" title="零满多咸阳西华路店｜领取3张·核销3张">咸阳西华路店<i>3核销</i></span>
+<span class="chip none" title="零满多咸阳马泉花苑店｜未参与">咸阳马泉花苑店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">刘世延</span>
+            <span class="owner-rate">84.6%</span>
+            <span class="owner-meta">分管 <b>13</b> 家 · 已核销 <b>11</b> 家 · 未核销 <b>2</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多台北湾店｜领取149张·核销149张">台北湾店<i>149核销</i></span>
+<span class="chip used" title="零满多华润二十四城店｜领取31张·核销31张">华润二十四城店<i>31核销</i></span>
+<span class="chip used" title="零满多石油大学店｜领取27张·核销27张">石油大学店<i>27核销</i></span>
+<span class="chip used" title="零满多群星莱骊店｜领取18张·核销18张">群星莱骊店<i>18核销</i></span>
+<span class="chip used" title="零满多利君未来城店｜领取14张·核销14张">利君未来城店<i>14核销</i></span>
+<span class="chip used" title="零满多阳光北郡店｜领取9张·核销9张">阳光北郡店<i>9核销</i></span>
+<span class="chip used" title="零满多新北城店｜领取8张·核销8张">新北城店<i>8核销</i></span>
+<span class="chip used" title="零满多海璟时代店｜领取5张·核销5张">海璟时代店<i>5核销</i></span>
+<span class="chip used" title="零满多荣华北经城店｜领取4张·核销4张">荣华北经城店<i>4核销</i></span>
+<span class="chip used" title="零满多凤城一路2店｜领取2张·核销2张">凤城一路2店<i>2核销</i></span>
+<span class="chip used" title="零满多浐灞一号店｜领取2张·核销2张">浐灞一号店<i>2核销</i></span>
+<span class="chip none" title="零满多恒大国际城店｜未参与">恒大国际城店<i>—</i></span>
+<span class="chip none" title="零满多阳光台365店｜未参与">阳光台365店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">谢泽</span>
+            <span class="owner-rate">83.3%</span>
+            <span class="owner-meta">分管 <b>12</b> 家 · 已核销 <b>10</b> 家 · 未核销 <b>2</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多田家湾店｜领取39张·核销39张">田家湾店<i>39核销</i></span>
+<span class="chip used" title="零满多御锦城2店｜领取25张·核销25张">御锦城2店<i>25核销</i></span>
+<span class="chip used" title="零满多御锦城店｜领取25张·核销25张">御锦城店<i>25核销</i></span>
+<span class="chip used" title="零满多全运村店｜领取20张·核销20张">全运村店<i>20核销</i></span>
+<span class="chip used" title="零满多璀璨天城店｜领取14张·核销14张">璀璨天城店<i>14核销</i></span>
+<span class="chip used" title="零满多红星美凯城店｜领取8张·核销8张">红星美凯城店<i>8核销</i></span>
+<span class="chip used" title="零满多安诚御花苑店｜领取5张·核销5张">安诚御花苑店<i>5核销</i></span>
+<span class="chip used" title="零满多袁雒店｜领取4张·核销4张">袁雒店<i>4核销</i></span>
+<span class="chip used" title="零满多东城新一家店｜领取3张·核销3张">东城新一家店<i>3核销</i></span>
+<span class="chip used" title="零满多合能十里锦绣店｜领取3张·核销3张">合能十里锦绣店<i>3核销</i></span>
+<span class="chip none" title="零满多恒大帝景店｜未参与">恒大帝景店<i>—</i></span>
+<span class="chip none" title="零满多招商央畔店｜未参与">招商央畔店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">李帆帆</span>
+            <span class="owner-rate">83.3%</span>
+            <span class="owner-meta">分管 <b>6</b> 家 · 已核销 <b>5</b> 家 · 未核销 <b>1</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多福景祥苑店｜领取33张·核销33张">福景祥苑店<i>33核销</i></span>
+<span class="chip used" title="零满多文津观澜店｜领取13张·核销13张">文津观澜店<i>13核销</i></span>
+<span class="chip used" title="零满多人民西路店｜领取2张·核销2张">人民西路店<i>2核销</i></span>
+<span class="chip used" title="零满多奥林匹克花园店｜领取2张·核销2张">奥林匹克花园店<i>2核销</i></span>
+<span class="chip used" title="零满多沣润和园店｜领取2张·核销2张">沣润和园店<i>2核销</i></span>
+<span class="chip none" title="零满多陈杨新界店｜未参与">陈杨新界店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">李晓攀</span>
+            <span class="owner-rate">81.8%</span>
+            <span class="owner-meta">分管 <b>11</b> 家 · 已核销 <b>9</b> 家 · 未核销 <b>2</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多宏府鹍翔九天店｜领取27张·核销27张">宏府鹍翔九天店<i>27核销</i></span>
+<span class="chip used" title="零满多铁安一街店｜领取22张·核销22张">铁安一街店<i>22核销</i></span>
+<span class="chip used" title="零满多蔚蓝观园店｜领取12张·核销12张">蔚蓝观园店<i>12核销</i></span>
+<span class="chip used" title="零满多凤城四路店｜领取9张·核销9张">凤城四路店<i>9核销</i></span>
+<span class="chip used" title="零满多国宾中央店｜领取6张·核销6张">国宾中央店<i>6核销</i></span>
+<span class="chip used" title="零满多草场坡店｜领取5张·核销5张">草场坡店<i>5核销</i></span>
+<span class="chip used" title="零满多羽源欣居店｜领取4张·核销4张">羽源欣居店<i>4核销</i></span>
+<span class="chip used" title="零满多东方雅典店｜领取3张·核销3张">东方雅典店<i>3核销</i></span>
+<span class="chip used" title="零满多长缨西路店｜领取3张·核销3张">长缨西路店<i>3核销</i></span>
+<span class="chip none" title="零满多蔚蓝君城店｜未参与">蔚蓝君城店<i>—</i></span>
+<span class="chip none" title="零满多西铁一中店｜未参与">西铁一中店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">桓伟</span>
+            <span class="owner-rate">80.0%</span>
+            <span class="owner-meta">分管 <b>10</b> 家 · 已核销 <b>8</b> 家 · 未核销 <b>2</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多长安明珠店｜领取26张·核销26张">长安明珠店<i>26核销</i></span>
+<span class="chip used" title="零满多林业家园店｜领取20张·核销20张">林业家园店<i>20核销</i></span>
+<span class="chip used" title="零满多长里村店｜领取13张·核销13张">长里村店<i>13核销</i></span>
+<span class="chip used" title="零满多青年南街店｜领取4张·核销4张">青年南街店<i>4核销</i></span>
+<span class="chip used" title="零满多兰乔国际城店｜领取2张·核销2张">兰乔国际城店<i>2核销</i></span>
+<span class="chip used" title="零满多南长安街1号店｜领取2张·核销2张">南长安街1号店<i>2核销</i></span>
+<span class="chip used" title="零满多陕职院店｜领取2张·核销2张">陕职院店<i>2核销</i></span>
+<span class="chip used" title="零满多天琴湾店｜领取1张·核销1张">天琴湾店<i>1核销</i></span>
+<span class="chip none" title="零满多中南春风南岸店｜未参与">中南春风南岸店<i>—</i></span>
+<span class="chip none" title="零满多长里村2店｜未参与">长里村2店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">周彬</span>
+            <span class="owner-rate">75.0%</span>
+            <span class="owner-meta">分管 <b>8</b> 家 · 已核销 <b>6</b> 家 · 未核销 <b>2</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多雅居乐店｜领取27张·核销27张">雅居乐店<i>27核销</i></span>
+<span class="chip used" title="零满多隆清城店｜领取19张·核销19张">隆清城店<i>19核销</i></span>
+<span class="chip used" title="零满多航天城天谐苑店｜领取9张·核销9张">航天城天谐苑店<i>9核销</i></span>
+<span class="chip used" title="零满多黄良店｜领取9张·核销9张">黄良店<i>9核销</i></span>
+<span class="chip used" title="零满多斗门南街店｜领取1张·核销1张">斗门南街店<i>1核销</i></span>
+<span class="chip used" title="零满多智慧城店｜领取1张·核销1张">智慧城店<i>1核销</i></span>
+<span class="chip none" title="零满多曹村店｜未参与">曹村店<i>—</i></span>
+<span class="chip none" title="零满多绿园大厦店｜未参与">绿园大厦店<i>—</i></span></div>
+    </div>
+<div class="owner-block">
+        <div class="owner-head">
+            <span class="owner-name">冯卓</span>
+            <span class="owner-rate">33.3%</span>
+            <span class="owner-meta">分管 <b>3</b> 家 · 已核销 <b>1</b> 家 · 未核销 <b>2</b> 家</span>
+        </div>
+        <div class="store-chips"><span class="chip used" title="零满多杨官寨店｜领取2张·核销2张">杨官寨店<i>2核销</i></span>
+<span class="chip none" title="零满多崇文佳苑店｜未参与">崇文佳苑店<i>—</i></span>
+<span class="chip none" title="零满多群贤北府店｜未参与">群贤北府店<i>—</i></span></div>
+    </div></div>
+            </div>
+            <div class="chart-card full">
+                <div class="chart-title">核销门店 TOP15</div>
+                <div id="storeChart" class="chart tall"></div>
+            </div>
+            <div class="chart-card full">
+                <div class="chart-title">未参与门店（0 领取 / 0 核销）
+                    <span class="chart-sub-note">名册在册但券明细无记录 · 共 15 家 · 督导重点唤醒</span>
+                </div>
+                <div class="store-list"><div class="sl-group"><span class="sl-owner">冯卓：</span><span class="sl-store">崇文佳苑店</span>、<span class="sl-store">群贤北府店</span></div><div class="sl-group"><span class="sl-owner">刘世延：</span><span class="sl-store">恒大国际城店</span>、<span class="sl-store">阳光台365店</span></div><div class="sl-group"><span class="sl-owner">周彬：</span><span class="sl-store">曹村店</span>、<span class="sl-store">绿园大厦店</span></div><div class="sl-group"><span class="sl-owner">张金颖：</span><span class="sl-store">咸阳马泉花苑店</span></div><div class="sl-group"><span class="sl-owner">李帆帆：</span><span class="sl-store">陈杨新界店</span></div><div class="sl-group"><span class="sl-owner">李晓攀：</span><span class="sl-store">西铁一中店</span>、<span class="sl-store">蔚蓝君城店</span></div><div class="sl-group"><span class="sl-owner">桓伟：</span><span class="sl-store">中南春风南岸店</span>、<span class="sl-store">长里村2店</span></div><div class="sl-group"><span class="sl-owner">谢泽：</span><span class="sl-store">招商央畔店</span>、<span class="sl-store">恒大帝景店</span></div><div class="sl-group"><span class="sl-owner">高雅静：</span><span class="sl-store">外国语大学店</span></div></div>
+            </div>
+            <div class="chart-card full">
+                <div class="chart-title">已核销门店 · 核销最差后十名
+                    <span class="chart-sub-note">仅统计已核销门店 · 按核销张数升序</span>
+                </div>
+                <div id="storeWorstChart" class="chart tall"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 板块二：小程序销售 ============ -->
+    <div class="section" id="sec-xc">
+        <div class="section-head">
+            <span class="badge xc">二</span>
+            <h2>小程序销售（月累计）</h2>
+            <span class="meta">预售 / 商城 / 秒杀 ｜ 统计区间 09-01 ~ 09-08</span>
+        </div>
+        <div class="kpi-grid">
+            <div class="kpi-card amber">
+                <div class="kpi-label">总订单数</div>
+                <div class="kpi-value">119<span class="kpi-unit">单</span></div>
+                <div class="kpi-note">已取消 27 单（取消率 22.7%）</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">支付金额</div>
+                <div class="kpi-value">¥3791.7</div>
+                <div class="kpi-note">有效订单金额 ¥3090.4</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-label">销售件数</div>
+                <div class="kpi-value">144<span class="kpi-unit">件</span></div>
+                <div class="kpi-note">有效订单 92 单</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">核销进度</div>
+                <div class="kpi-value">66<span class="kpi-unit">单已核销</span></div>
+                <div class="kpi-note">待核销 26 单</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">覆盖门店</div>
+                <div class="kpi-value">34<span class="kpi-unit">家</span></div>
+                <div class="kpi-note">小程序全渠道订单</div>
+            </div>
+        </div>
+
+        <div class="sub-kpi">
+            <div class="box"><div class="t">月饼预售订单（订单类型=预售）</div><div class="v">25 单 · ¥1726.2</div></div>
+            <div class="box"><div class="t">预售已核销</div><div class="v">15 单 · ¥1212.7</div></div>
+            <div class="box"><div class="t">预售待核销</div><div class="v">4 单</div></div>
+            <div class="box"><div class="t">预售覆盖门店</div><div class="v">16 家</div></div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card xc">
+                <div class="chart-title">订单类型分布（单量 / 金额）</div>
+                <div id="xcTypeChart" class="chart"></div>
+            </div>
+            <div class="chart-card xc">
+                <div class="chart-title">订单状态分布</div>
+                <div id="xcStatusChart" class="chart"></div>
+            </div>
+            <div class="chart-card xc full">
+                <div class="chart-title">各门店订单金额
+                    <span class="chart-sub-note">悬停查看督导与件数</span>
+                </div>
+                <div id="xcStoreChart" class="chart xtall"></div>
+            </div>
+            <div class="chart-card xc">
+                <div class="chart-title">每日订单量 / 金额</div>
+                <div id="xcDayChart" class="chart"></div>
+            </div>
+            <div class="chart-card xc">
+                <div class="chart-title">中秋预售商品金额
+                    <span class="chart-sub-note">
+                        <span style="color:#d97706">■</span>有效
+                        <span style="color:#d1d5db">■</span>已取消
+                    </span>
+                </div>
+                <div id="itemChart" class="chart"></div>
+            </div>
+            <div class="chart-card xc">
+                <div class="chart-title">小程序商品金额 TOP10（全渠道）</div>
+                <div id="allItemChart" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 板块三：抖音 ============ -->
+    <div class="section" id="sec-dy">
+        <div class="section-head">
+            <span class="badge dy">三</span>
+            <h2>抖音来客</h2>
+            <span class="meta">团购券成交与到店核销 ｜ 统计区间 月累计（导出未含日期列）</span>
+        </div>
+        <div class="kpi-grid">
+            <div class="kpi-card slate">
+                <div class="kpi-label">商品访问人数</div>
+                <div class="kpi-value">12764<span class="kpi-unit">人</span></div>
+                <div class="kpi-note">访问-成交转化率 20.1%</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-label">成交券数 / 金额</div>
+                <div class="kpi-value">2734<span class="kpi-unit">张</span> / ¥84148.0</div>
+                <div class="kpi-note">成交人数 2560 人</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">已核销券数 / 金额</div>
+                <div class="kpi-value">1715<span class="kpi-unit">张</span> / ¥38450.7</div>
+                <div class="kpi-note">核销率 62.7%（占成交）</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">退款券数 / 金额</div>
+                <div class="kpi-value">1594<span class="kpi-unit">张</span> / ¥39472.74</div>
+                <div class="kpi-note">退款率 58.3%（占成交）</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">新客成交</div>
+                <div class="kpi-value">1556<span class="kpi-unit">人</span> / ¥54819.5</div>
+                <div class="kpi-note">新客贡献金额</div>
+            </div>
+        </div>
+
+        <!-- ① 抖音全商品销售总览（总数据：含中秋及其他在售商品） -->
+        <div class="sub-head">
+            <span class="sub-no">①</span>
+            <h3>抖音全商品销售总览</h3>
+            <span class="meta">总数据 · 全部在售商品（含中秋）共 45 个 SKU ｜ 商品核销金额维度</span>
+        </div>
+        <div class="kpi-grid compact">
+            <div class="kpi-card blue">
+                <div class="kpi-label">成交券数 / 金额</div>
+                <div class="kpi-value">2734<span class="kpi-unit">张</span> / ¥84148.0</div>
+                <div class="kpi-note">成交人数 2560 人 ｜ 券均 ¥30.8</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">核销券数 / 金额</div>
+                <div class="kpi-value">1715<span class="kpi-unit">张</span> / ¥38450.7</div>
+                <div class="kpi-note">核销率 62.7%</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">退款券数 / 金额</div>
+                <div class="kpi-value">1594<span class="kpi-unit">张</span> / ¥39472.74</div>
+                <div class="kpi-note">退款率 58.3%</div>
+            </div>
+            <div class="kpi-card slate">
+                <div class="kpi-label">访问 / 转化</div>
+                <div class="kpi-value">12764<span class="kpi-unit">人</span></div>
+                <div class="kpi-note">访问-成交转化率 20.1%</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">新客成交</div>
+                <div class="kpi-value">1556<span class="kpi-unit">人</span> / ¥54819.5</div>
+                <div class="kpi-note">新客贡献</div>
+            </div>
+        </div>
+        <div class="cat-grid">
+            <div class="cat-card" style="border-top: 3px solid #b45309; background: #fffbeb;">
+        <div class="cat-head">
+            <span class="cat-name" style="color:#b45309">代金券</span>
+            <span class="cat-count">8 个 SKU</span>
+        </div>
+        <div class="cat-metrics">
+            <div class="m"><span class="ml">成交券数</span><span class="mv">418 张</span></div>
+            <div class="m"><span class="ml">成交金额</span><span class="mv">¥45,590</span></div>
+            <div class="m"><span class="ml">核销券数</span><span class="mv">154 张</span></div>
+            <div class="m"><span class="ml">核销金额</span><span class="mv">¥13,607.80</span></div>
+            <div class="m"><span class="ml">核销率</span><span class="mv">36.8%</span></div>
+            <div class="m"><span class="ml">退款券数</span><span class="mv">217 张</span></div>
+            <div class="m"><span class="ml">退款金额</span><span class="mv">¥17,358.20</span></div>
+            <div class="m"><span class="ml">退款率</span><span class="mv">51.9%</span></div>
+            <div class="m"><span class="ml">访问人数</span><span class="mv">1484 人</span></div>
+            <div class="m"><span class="ml">转化率</span><span class="mv">27.0%</span></div>
+            <div class="m"><span class="ml">新客成交</span><span class="mv">234 人</span></div>
+            <div class="m"><span class="ml">新客金额</span><span class="mv">¥25,966.50</span></div>
+            <div class="m"><span class="ml">券均单价</span><span class="mv">¥109.1</span></div>
+        </div>
+    </div><div class="cat-card" style="border-top: 3px solid #c2410c; background: #fff7ed;">
+        <div class="cat-head">
+            <span class="cat-name" style="color:#c2410c">品牌代金券</span>
+            <span class="cat-count">2 个 SKU</span>
+        </div>
+        <div class="cat-metrics">
+            <div class="m"><span class="ml">成交券数</span><span class="mv">14 张</span></div>
+            <div class="m"><span class="ml">成交金额</span><span class="mv">¥680</span></div>
+            <div class="m"><span class="ml">核销券数</span><span class="mv">12 张</span></div>
+            <div class="m"><span class="ml">核销金额</span><span class="mv">¥590</span></div>
+            <div class="m"><span class="ml">核销率</span><span class="mv">85.7%</span></div>
+            <div class="m"><span class="ml">退款券数</span><span class="mv">7 张</span></div>
+            <div class="m"><span class="ml">退款金额</span><span class="mv">¥320</span></div>
+            <div class="m"><span class="ml">退款率</span><span class="mv">50.0%</span></div>
+            <div class="m"><span class="ml">访问人数</span><span class="mv">3120 人</span></div>
+            <div class="m"><span class="ml">转化率</span><span class="mv">0.4%</span></div>
+            <div class="m"><span class="ml">新客成交</span><span class="mv">112 人</span></div>
+            <div class="m"><span class="ml">新客金额</span><span class="mv">¥7,700</span></div>
+            <div class="m"><span class="ml">券均单价</span><span class="mv">¥48.6</span></div>
+        </div>
+    </div><div class="cat-card" style="border-top: 3px solid #0f766e; background: #ecfeff;">
+        <div class="cat-head">
+            <span class="cat-name" style="color:#0f766e">团购</span>
+            <span class="cat-count">24 个 SKU</span>
+        </div>
+        <div class="cat-metrics">
+            <div class="m"><span class="ml">成交券数</span><span class="mv">2140 张</span></div>
+            <div class="m"><span class="ml">成交金额</span><span class="mv">¥31,436.10</span></div>
+            <div class="m"><span class="ml">核销券数</span><span class="mv">1470 张</span></div>
+            <div class="m"><span class="ml">核销金额</span><span class="mv">¥20,937.80</span></div>
+            <div class="m"><span class="ml">核销率</span><span class="mv">68.7%</span></div>
+            <div class="m"><span class="ml">退款券数</span><span class="mv">1274 张</span></div>
+            <div class="m"><span class="ml">退款金额</span><span class="mv">¥18,120.44</span></div>
+            <div class="m"><span class="ml">退款率</span><span class="mv">59.5%</span></div>
+            <div class="m"><span class="ml">访问人数</span><span class="mv">7123 人</span></div>
+            <div class="m"><span class="ml">转化率</span><span class="mv">28.1%</span></div>
+            <div class="m"><span class="ml">新客成交</span><span class="mv">1178 人</span></div>
+            <div class="m"><span class="ml">新客金额</span><span class="mv">¥19,722.10</span></div>
+            <div class="m"><span class="ml">券均单价</span><span class="mv">¥14.7</span></div>
+        </div>
+    </div><div class="cat-card" style="border-top: 3px solid #7c3aed; background: #f5f3ff;">
+        <div class="cat-head">
+            <span class="cat-name" style="color:#7c3aed">零售品</span>
+            <span class="cat-count">11 个 SKU</span>
+        </div>
+        <div class="cat-metrics">
+            <div class="m"><span class="ml">成交券数</span><span class="mv">162 张</span></div>
+            <div class="m"><span class="ml">成交金额</span><span class="mv">¥6,441.90</span></div>
+            <div class="m"><span class="ml">核销券数</span><span class="mv">79 张</span></div>
+            <div class="m"><span class="ml">核销金额</span><span class="mv">¥3,315.10</span></div>
+            <div class="m"><span class="ml">核销率</span><span class="mv">48.8%</span></div>
+            <div class="m"><span class="ml">退款券数</span><span class="mv">96 张</span></div>
+            <div class="m"><span class="ml">退款金额</span><span class="mv">¥3,674.10</span></div>
+            <div class="m"><span class="ml">退款率</span><span class="mv">59.3%</span></div>
+            <div class="m"><span class="ml">访问人数</span><span class="mv">1037 人</span></div>
+            <div class="m"><span class="ml">转化率</span><span class="mv">13.5%</span></div>
+            <div class="m"><span class="ml">新客成交</span><span class="mv">32 人</span></div>
+            <div class="m"><span class="ml">新客金额</span><span class="mv">¥1,430.90</span></div>
+            <div class="m"><span class="ml">券均单价</span><span class="mv">¥39.8</span></div>
+        </div>
+    </div>
+        </div>
+        <div class="chart-grid">
+            <div class="chart-card dy">
+                <div class="chart-title">券种对比（成交 / 核销 / 退款金额）</div>
+                <div id="dyCatChart" class="chart"></div>
+            </div>
+            
+            <div class="chart-card dy">
+                <div class="chart-title">商品成交 / 核销 / 退款金额 TOP20
+                    <span class="chart-sub-note">代金券/品牌代金券/团购/零售品 ｜已剔除 6 个仅历史退款的商品</span>
+                </div>
+                <div id="dyItemChart" class="chart" style="height: 610px;"></div>
+            </div>
+        </div>
+
+
+        <!-- ② 各门店销售（本月核销，抖音来客全门店） -->
+        <div class="sub-head">
+            <span class="sub-no">②</span>
+            <h3>月累计至今 · 各门店销售金额与成交单数</h3>
+            <span class="meta">抖音来客全门店（含全部在售商品，不仅中秋）｜ 核销 ¥38450.7</span>
+        </div>
+        <div class="kpi-grid compact">
+            <div class="kpi-card slate">
+                <div class="kpi-label">核销门店数</div>
+                <div class="kpi-value">78<span class="kpi-unit">家</span></div>
+                <div class="kpi-note">本月有核销记录的门店</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">核销金额</div>
+                <div class="kpi-value">¥38450.7</div>
+                <div class="kpi-note">订单实收合计</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-label">成交单数（已核销）</div>
+                <div class="kpi-value">1715<span class="kpi-unit">单</span></div>
+                <div class="kpi-note">单均 ¥22.40</div>
+            </div>
+        </div>
+        <div class="chart-grid">
+            <div class="chart-card dy full">
+                <div class="chart-title">门店核销金额 TOP 30
+                    <span class="chart-sub-note">悬停查看督导与成交单数</span>
+                </div>
+                <div id="dyStoreChart" class="chart" style="height: 750px;"></div>
+            </div>
+        </div>
+
+        <!-- ③ 中秋活动商品数据 -->
+        <div class="sub-head">
+            <span class="sub-no zy">③</span>
+            <h3>中秋活动商品数据</h3>
+            <span class="meta">中秋活动商品（代金券/团购/零售品）｜ 13 个 SKU</span>
+        </div>
+        <div class="kpi-grid compact">
+            <div class="kpi-card amber">
+                <div class="kpi-label">成交券数 / 金额</div>
+                <div class="kpi-value">999<span class="kpi-unit">张</span> / ¥64965.3</div>
+                <div class="kpi-note">券均 ¥65.0</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">核销券数 / 金额</div>
+                <div class="kpi-value">462<span class="kpi-unit">张</span> / ¥23282.8</div>
+                <div class="kpi-note">核销率 46.2%</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">退款券数 / 金额</div>
+                <div class="kpi-value">392<span class="kpi-unit">张</span> / ¥22066.2</div>
+                <div class="kpi-note">退款率 39.2%</div>
+            </div>
+            <div class="kpi-card slate">
+                <div class="kpi-label">访问 / 转化</div>
+                <div class="kpi-value">4387<span class="kpi-unit">人</span></div>
+                <div class="kpi-note">转化率 20.7%</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">新客成交</div>
+                <div class="kpi-value">545<span class="kpi-unit">人</span> / ¥37373.9</div>
+                <div class="kpi-note">新客贡献</div>
+            </div>
+        </div>
+        <div class="chart-grid">
+            <div class="chart-card dy">
+                <div class="chart-title">中秋商品成交 / 核销 / 退款金额</div>
+                <div id="dyZyItemChart" class="chart" style="height: 480px;"></div>
+            </div>
+        </div>
+
+        <!-- ④ 中秋商品各门店核销 -->
+        <div class="sub-head">
+            <span class="sub-no zy">④</span>
+            <h3>中秋商品 · 各门店核销数据</h3>
+            <span class="meta">仅统计中秋活动商品的到店核销</span>
+        </div>
+        <div class="kpi-grid compact">
+            <div class="kpi-card slate">
+                <div class="kpi-label">核销门店数</div>
+                <div class="kpi-value">68<span class="kpi-unit">家</span></div>
+                <div class="kpi-note">有中秋商品核销的门店</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">中秋核销金额</div>
+                <div class="kpi-value">¥23282.8</div>
+                <div class="kpi-note">占全店核销 60.6%</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-label">成交单数（已核销）</div>
+                <div class="kpi-value">461<span class="kpi-unit">单</span></div>
+                <div class="kpi-note">单均 ¥50.50</div>
+            </div>
+        </div>
+        <div class="chart-grid">
+            <div class="chart-card dy full">
+                <div class="chart-title">中秋商品核销金额 TOP 30
+                    <span class="chart-sub-note">悬停查看督导与成交单数</span>
+                </div>
+                <div id="dyZyStoreChart" class="chart" style="height: 750px;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+var charts = [];
+
+// ---------- 板块一：康师傅券 ----------
+var funnelChart = echarts.init(document.getElementById('funnelChart'));
+charts.push(funnelChart);
+funnelChart.setOption({
+    tooltip: { trigger: 'item', formatter: function(p) {
+        if (p.name === '总限量') return p.name + '：' + p.value + ' 张';
+        if (p.name === '已发放') return '已发放：' + p.value + ' 张<br/>占限量 ' + (p.value / 2400 * 100).toFixed(1) + '%';
+        return '已核销：' + p.value + ' 张<br/>占发放 63.4%<br/>占限量 ' + (p.value / 2400 * 100).toFixed(1) + '%';
+    } },
+    legend: { bottom: '2%', data: ['总限量', '已发放', '已核销'] },
+    color: ['#e5e7eb', '#f7931e', '#ff6b35'],
+    series: [{
+        type: 'funnel', left: '10%', top: 20, bottom: 40, width: '80%',
+        minSize: '25%', sort: 'descending', gap: 4,
+        label: {
+            show: true, position: 'inside', fontSize: 12, lineHeight: 18,
+            formatter: function(p) {
+                if (p.name === '总限量') return p.name + '\n' + p.value + '张';
+                if (p.name === '已发放') return p.name + '\n' + p.value + '张 / ' + (p.value / 2400 * 100).toFixed(1) + '%';
+                return p.name + '\n' + p.value + '张 / ' + (p.value / 2400 * 100).toFixed(1) + '%';
+            },
+            color: '#ffffff'
+        },
+        labelLine: { show: false },
+        itemStyle: { borderColor: '#fff', borderWidth: 2 },
+        data: [
+            { value: 2400, name: '总限量', label: { color: '#000000', fontWeight: 'bold' } },
+            { value: 2140, name: '已发放', label: { color: '#ffffff' } },
+            { value: 1356, name: '已核销', label: { color: '#ffffff' } }
+        ]
+    }]
+});
+
+var cfStatusChart = echarts.init(document.getElementById('cfStatusChart'));
+charts.push(cfStatusChart);
+cfStatusChart.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}: {c}张 ({d}%)' },
+    legend: { bottom: '2%' },
+    color: ['#10b981', '#ef4444'],
+    series: [{
+        type: 'pie', radius: ['45%', '70%'], center: ['50%', '45%'],
+        itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}\n{c}张\n{d}%' },
+        data: [
+            { value: 1356, name: '已使用' },
+            { value: 784, name: '未使用' }
+        ]
+    }]
+});
+
+var cfDayChart = echarts.init(document.getElementById('cfDayChart'));
+charts.push(cfDayChart);
+cfDayChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { data: ["领取", "核销", "核销率"], top: 0 },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: ["09-01", "09-02", "09-03", "09-04", "09-05", "09-06", "09-07", "09-08", "09-09"] },
+    yAxis: [
+        { type: 'value', name: '数量（张）' },
+        { type: 'value', name: '核销率', axisLabel: { formatter: '{value}%' }, max: 100 }
+    ],
+    series: [{"name": "领取", "type": "bar", "data": [380, 248, 309, 263, 292, 295, 210, 143, 0], "barWidth": "28%", "itemStyle": {"color": "#60a5fa", "borderRadius": [4, 4, 0, 0]}, "label": {"show": true, "position": "top"}}, {"name": "核销", "type": "bar", "data": [166, 112, 255, 183, 205, 232, 111, 91, 1], "barWidth": "28%", "itemStyle": {"color": "#ff6b35", "borderRadius": [4, 4, 0, 0]}, "label": {"show": true, "position": "top"}}, {"name": "核销率", "type": "line", "yAxisIndex": 1, "data": [43.7, 45.2, 82.5, 69.6, 70.2, 78.6, 52.9, 63.6, 0], "itemStyle": {"color": "#10b981"}, "lineStyle": {"width": 3}, "smooth": true}]
+});
+
+var storeChart = echarts.init(document.getElementById('storeChart'));
+charts.push(storeChart);
+storeChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        return p.name + '<br/>督导：' + (p.data.owner || '未分配') + '<br/>核销张数：<b>' + p.value + ' 张</b>';
+    } },
+    grid: { left: '3%', right: '8%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '核销张数' },
+    yAxis: { type: 'category', data: ["零满多台北湾店", "零满多杜永村店", "零满多安化门店", "零满多兴隆鑫苑店", "零满多紫薇西棠店", "零满多田家湾店", "零满多福景祥苑店", "零满多渭南仓程路店", "零满多万科城市之光店", "零满多华润二十四城店", "零满多渭南高新万达店", "零满多华胥镇店", "零满多雅居乐店", "零满多石油大学店", "零满多宏府鹍翔九天店"], axisLabel: { width: 180, overflow: 'truncate' } },
+    series: [{
+        type: 'bar', data: [{"value": 149, "name": "零满多台北湾店", "owner": "刘世延"}, {"value": 80, "name": "零满多杜永村店", "owner": "高雅静"}, {"value": 71, "name": "零满多安化门店", "owner": "高雅静"}, {"value": 62, "name": "零满多兴隆鑫苑店", "owner": "高雅静"}, {"value": 43, "name": "零满多紫薇西棠店", "owner": "高雅静"}, {"value": 39, "name": "零满多田家湾店", "owner": "谢泽"}, {"value": 33, "name": "零满多福景祥苑店", "owner": "李帆帆"}, {"value": 32, "name": "零满多渭南仓程路店", "owner": "李亚兵"}, {"value": 31, "name": "零满多万科城市之光店", "owner": "段磊"}, {"value": 31, "name": "零满多华润二十四城店", "owner": "刘世延"}, {"value": 30, "name": "零满多渭南高新万达店", "owner": "李亚兵"}, {"value": 29, "name": "零满多华胥镇店", "owner": "段磊"}, {"value": 27, "name": "零满多雅居乐店", "owner": "周彬"}, {"value": 27, "name": "零满多石油大学店", "owner": "刘世延"}, {"value": 27, "name": "零满多宏府鹍翔九天店", "owner": "李晓攀"}], barWidth: '62%',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: '#f7931e' }, { offset: 1, color: '#ff6b35' }
+            ]),
+            borderRadius: [0, 4, 4, 0]
+        },
+        label: { show: true, position: 'right', formatter: '{c}' }
+    }]
+});
+
+var storeWorstChart = echarts.init(document.getElementById('storeWorstChart'));
+charts.push(storeWorstChart);
+storeWorstChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        return p.name + '<br/>督导：' + (p.data.owner || '未分配') + '<br/>核销张数：<b>' + p.value + ' 张</b><br/>领取张数：' + (p.data.claim || 0) + ' 张';
+    } },
+    grid: { left: '3%', right: '8%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '核销张数' },
+    yAxis: { type: 'category', data: ["天琴湾店 · 桓伟", "斗门南街店 · 周彬", "智慧城店 · 周彬", "江林新城店 · 段磊", "杨官寨店 · 冯卓", "兰乔国际城店 · 桓伟", "南长安街1号店 · 桓伟", "陕职院店 · 桓伟", "奥林匹克花园店 · 李帆帆", "沣润和园店 · 李帆帆"], axisLabel: { width: 220, overflow: 'truncate' } },
+    series: [{
+        type: 'bar', data: [{"value": 1, "name": "零满多天琴湾店", "owner": "桓伟", "claim": 1}, {"value": 1, "name": "零满多斗门南街店", "owner": "周彬", "claim": 1}, {"value": 1, "name": "零满多智慧城店", "owner": "周彬", "claim": 1}, {"value": 2, "name": "零满多江林新城店", "owner": "段磊", "claim": 2}, {"value": 2, "name": "零满多杨官寨店", "owner": "冯卓", "claim": 2}, {"value": 2, "name": "零满多兰乔国际城店", "owner": "桓伟", "claim": 2}, {"value": 2, "name": "零满多南长安街1号店", "owner": "桓伟", "claim": 2}, {"value": 2, "name": "零满多陕职院店", "owner": "桓伟", "claim": 2}, {"value": 2, "name": "零满多奥林匹克花园店", "owner": "李帆帆", "claim": 2}, {"value": 2, "name": "零满多沣润和园店", "owner": "李帆帆", "claim": 2}], barWidth: '62%',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: '#ef4444' }, { offset: 1, color: '#f97316' }
+            ]),
+            borderRadius: [0, 4, 4, 0]
+        },
+        label: { show: true, position: 'right', formatter: '{c}' }
+    }]
+});
+
+// ---------- 板块二：小程序销售 ----------
+var xcTypeChart = echarts.init(document.getElementById('xcTypeChart'));
+charts.push(xcTypeChart);
+xcTypeChart.setOption({
+    tooltip: { trigger: 'item', formatter: function(p) {
+        return p.name + '：' + p.value + ' 单<br/>金额 ¥' + p.data.amt;
+    } },
+    legend: { bottom: '2%' },
+    color: ['#d97706', '#3b82f6', '#8b5cf6'],
+    series: [{
+        type: 'pie', radius: ['42%', '68%'], center: ['50%', '45%'],
+        itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: function(p) { return p.name + '\n' + p.value + '单\n¥' + p.data.amt; } },
+        data: [{"value": 25, "name": "预售", "amt": 1726.2}, {"value": 19, "name": "商城", "amt": 186.5}, {"value": 75, "name": "秒杀", "amt": 1879.0}]
+    }]
+});
+
+var xcStatusChart = echarts.init(document.getElementById('xcStatusChart'));
+charts.push(xcStatusChart);
+xcStatusChart.setOption({
+    tooltip: { trigger: 'item', formatter: function(p) {
+        return p.name + '：' + p.value + ' 单<br/>金额 ¥' + p.data.amt;
+    } },
+    legend: { bottom: '2%' },
+    color: ['#10b981', '#f59e0b', '#ef4444'],
+    series: [{
+        type: 'pie', radius: ['42%', '68%'], center: ['50%', '45%'],
+        itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: function(p) { return p.name + '\n' + p.value + '单\n¥' + p.data.amt; } },
+        data: [{"value": 66, "name": "已核销", "amt": 2318.2}, {"value": 26, "name": "待核销", "amt": 772.2}, {"value": 27, "name": "已取消", "amt": 701.3}]
+    }]
+});
+
+var xcStoreChart = echarts.init(document.getElementById('xcStoreChart'));
+charts.push(xcStoreChart);
+xcStoreChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        return p.name + '<br/>督导：' + (p.data.owner || '未分配') +
+               '<br/>金额：<b>¥' + p.value + '</b> ｜ 件数 ' + p.data.qty + ' 件';
+    } },
+    grid: { left: '3%', right: '10%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '金额（元）' },
+    yAxis: { type: 'category', data: ["零满多招商央畔店", "零满多渭南高新万达店", "零满多御河宸院店", "零满多咸阳西华路店", "零满多阳光城丽兹公馆店", "零满多航天城天谐苑店", "零满多中南春风南岸店", "零满多恒大帝景店", "零满多中航华府店", "零满多杨官寨店", "零满多宏府鹍翔九天店", "零满多御锦城店", "零满多西安宸院店", "零满多西铁一中店", "零满多长里村店", "零满多凤城四路店", "零满多铁安一街店", "零满多袁雒店", "零满多利君未来城店", "零满多田家湾店", "零满多璀璨天城店", "零满多国宾中央店", "零满多昆明池路店", "零满多雅居乐店", "零满多长安西路店", "零满多金泰店", "零满多兴隆鑫苑店", "零满多兰乔国际城店", "零满多福景祥苑店", "零满多青年南街店", "零满多华润二十四城店", "零满多隆清城店", "零满多锦绣秦川店", "零满多上塔坡店"], axisLabel: { width: 180, overflow: 'truncate' } },
+    series: [{
+        type: 'bar', data: [{"value": 3.5, "name": "零满多招商央畔店", "qty": 1, "owner": "谢泽"}, {"value": 8.5, "name": "零满多渭南高新万达店", "qty": 1, "owner": "李亚兵"}, {"value": 8.9, "name": "零满多御河宸院店", "qty": 1, "owner": "张金颖"}, {"value": 8.9, "name": "零满多咸阳西华路店", "qty": 1, "owner": "张金颖"}, {"value": 8.9, "name": "零满多阳光城丽兹公馆店", "qty": 1, "owner": "段磊"}, {"value": 14.9, "name": "零满多航天城天谐苑店", "qty": 1, "owner": "周彬"}, {"value": 18.9, "name": "零满多中南春风南岸店", "qty": 1, "owner": "桓伟"}, {"value": 27.7, "name": "零满多恒大帝景店", "qty": 3, "owner": "谢泽"}, {"value": 27.8, "name": "零满多中航华府店", "qty": 2, "owner": "高雅静"}, {"value": 27.8, "name": "零满多杨官寨店", "qty": 1, "owner": "冯卓"}, {"value": 37.7, "name": "零满多宏府鹍翔九天店", "qty": 3, "owner": "李晓攀"}, {"value": 37.8, "name": "零满多御锦城店", "qty": 2, "owner": "谢泽"}, {"value": 38.9, "name": "零满多西安宸院店", "qty": 1, "owner": "高雅静"}, {"value": 48.5, "name": "零满多西铁一中店", "qty": 3, "owner": "李晓攀"}, {"value": 49.0, "name": "零满多长里村店", "qty": 1, "owner": "桓伟"}, {"value": 53.5, "name": "零满多凤城四路店", "qty": 1, "owner": "李晓攀"}, {"value": 57.8, "name": "零满多铁安一街店", "qty": 2, "owner": "李晓攀"}, {"value": 57.9, "name": "零满多袁雒店", "qty": 2, "owner": "谢泽"}, {"value": 68.8, "name": "零满多利君未来城店", "qty": 3, "owner": "刘世延"}, {"value": 108.9, "name": "零满多田家湾店", "qty": 15, "owner": "谢泽"}, {"value": 117.8, "name": "零满多璀璨天城店", "qty": 3, "owner": "谢泽"}, {"value": 130.0, "name": "零满多国宾中央店", "qty": 2, "owner": "李晓攀"}, {"value": 144.7, "name": "零满多昆明池路店", "qty": 3, "owner": "高雅静"}, {"value": 146.6, "name": "零满多雅居乐店", "qty": 4, "owner": "周彬"}, {"value": 148.1, "name": "零满多长安西路店", "qty": 6, "owner": "段磊"}, {"value": 154.1, "name": "零满多金泰店", "qty": 5, "owner": "未分配"}, {"value": 166.6, "name": "零满多兴隆鑫苑店", "qty": 4, "owner": "高雅静"}, {"value": 214.0, "name": "零满多兰乔国际城店", "qty": 4, "owner": "桓伟"}, {"value": 218.0, "name": "零满多福景祥苑店", "qty": 11, "owner": "李帆帆"}, {"value": 231.1, "name": "零满多青年南街店", "qty": 10, "owner": "桓伟"}, {"value": 282.3, "name": "零满多华润二十四城店", "qty": 16, "owner": "刘世延"}, {"value": 312.8, "name": "零满多隆清城店", "qty": 12, "owner": "周彬"}, {"value": 388.3, "name": "零满多锦绣秦川店", "qty": 12, "owner": "张金颖"}, {"value": 422.7, "name": "零满多上塔坡店", "qty": 6, "owner": "高雅静"}], barWidth: '60%',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: '#fbbf24' }, { offset: 1, color: '#d97706' }
+            ]),
+            borderRadius: [0, 4, 4, 0]
+        },
+        label: { show: true, position: 'right', formatter: function(p) { return '¥' + p.value; } }
+    }]
+});
+
+var xcDayChart = echarts.init(document.getElementById('xcDayChart'));
+charts.push(xcDayChart);
+xcDayChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { data: ['订单量', '支付金额'], top: 0 },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: ["09-01", "09-02", "09-03", "09-04", "09-05", "09-06", "09-07", "09-08"] },
+    yAxis: [
+        { type: 'value', name: '订单（单）', minInterval: 1 },
+        { type: 'value', name: '金额（元）' }
+    ],
+    series: [
+        { name: '订单量', type: 'bar', data: [21, 3, 15, 6, 4, 51, 2, 17], barWidth: '32%',
+          itemStyle: { color: '#f59e0b', borderRadius: [4, 4, 0, 0] },
+          label: { show: true, position: 'top' } },
+        { name: '支付金额', type: 'line', yAxisIndex: 1, data: [695.6, 86.6, 352.3, 182.4, 185.6, 1570.6, 31.3, 687.3],
+          itemStyle: { color: '#d97706' }, lineStyle: { width: 3 }, smooth: true,
+          label: { show: true, formatter: '¥{c}' } }
+    ]
+});
+
+var itemChart = echarts.init(document.getElementById('itemChart'));
+charts.push(itemChart);
+itemChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        var s = p.name + '<br/>订单数：' + p.data.orders + ' 单 ｜ 件数：' + p.data.qty + ' 件';
+        params.forEach(function(q) { s += '<br/>' + q.marker + q.seriesName + '：¥' + q.value; });
+        return s;
+    } },
+    legend: { data: ['有效金额', '已取消金额'], top: 0 },
+    grid: { left: '3%', right: '10%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '金额（元）' },
+    yAxis: { type: 'category', data: ["三只松鼠坚果礼祥瑞礼1070g", "米旗花好月圆450g", "蒙牛特仑苏纯牛奶250ml*12", "德懋恭单色水晶饼500g", "老哥俩稻花香5kg", "鲁花低芥酸特香菜籽油5L", "米旗锦绣华月600g", "米旗喜迎仲秋400g"], axisLabel: { width: 170, overflow: 'truncate' } },
+    series: [
+        { name: '有效金额', type: 'bar', stack: 'i', data: [{"value": 0.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 1, "orders": 1}, {"value": 0.0, "name": "米旗花好月圆450g", "qty": 2, "orders": 1}, {"value": 42.9, "name": "蒙牛特仑苏纯牛奶250ml*12", "qty": 1, "orders": 1}, {"value": 55.6, "name": "德懋恭单色水晶饼500g", "qty": 3, "orders": 3}, {"value": 233.4, "name": "老哥俩稻花香5kg", "qty": 8, "orders": 8}, {"value": 233.7, "name": "鲁花低芥酸特香菜籽油5L", "qty": 3, "orders": 3}, {"value": 396.0, "name": "米旗锦绣华月600g", "qty": 4, "orders": 2}, {"value": 441.0, "name": "米旗喜迎仲秋400g", "qty": 10, "orders": 6}], barWidth: '58%',
+          itemStyle: { color: '#d97706' },
+          label: { show: true, position: 'inside', formatter: function(p) { return p.value > 0 ? '¥' + p.value : ''; } } },
+        { name: '已取消金额', type: 'bar', stack: 'i', data: [{"value": 39.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 1, "orders": 1}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 2, "orders": 1}, {"value": 0.0, "name": "蒙牛特仑苏纯牛奶250ml*12", "qty": 1, "orders": 1}, {"value": 27.8, "name": "德懋恭单色水晶饼500g", "qty": 3, "orders": 3}, {"value": 77.8, "name": "老哥俩稻花香5kg", "qty": 8, "orders": 8}, {"value": 0.0, "name": "鲁花低芥酸特香菜籽油5L", "qty": 3, "orders": 3}, {"value": 0.0, "name": "米旗锦绣华月600g", "qty": 4, "orders": 2}, {"value": 49.0, "name": "米旗喜迎仲秋400g", "qty": 10, "orders": 6}], barWidth: '58%',
+          itemStyle: { color: '#d1d5db', borderRadius: [0, 4, 4, 0] },
+          label: { show: true, position: 'right', color: '#9ca3af',
+                   formatter: function(p) { return p.value > 0 ? '取消 ¥' + p.value : ''; } } }
+    ]
+});
+
+var allItemChart = echarts.init(document.getElementById('allItemChart'));
+charts.push(allItemChart);
+allItemChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        var s = p.name + '<br/>订单数：' + p.data.orders + ' 单 ｜ 件数：' + p.data.qty + ' 件';
+        params.forEach(function(q) { s += '<br/>' + q.marker + q.seriesName + '：¥' + q.value; });
+        return s;
+    } },
+    legend: { data: ['有效金额', '已取消金额'], top: 0 },
+    grid: { left: '3%', right: '10%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '金额（元）' },
+    yAxis: { type: 'category', data: ["德懋恭单色水晶饼500g", "零优康鲜鸡蛋30枚", "五得利高筋超精粉六星5kg", "银桥利乐枕纯牛奶220g × 16", "老哥俩稻花香5kg", "鲁花低芥酸特香菜籽油5L", "邦淇非转基因纯香菜籽油5L", "米旗锦绣华月600g", "米旗喜迎仲秋400g", "银桥利乐枕核桃花生220g × 16"], axisLabel: { width: 170, overflow: 'truncate' } },
+    series: [
+        { name: '有效金额', type: 'bar', stack: 'a', data: [{"value": 55.6, "name": "德懋恭单色水晶饼500g", "qty": 3, "orders": 3}, {"value": 95.7, "name": "零优康鲜鸡蛋30枚", "qty": 5, "orders": 5}, {"value": 171.1, "name": "五得利高筋超精粉六星5kg", "qty": 9, "orders": 8}, {"value": 195.3, "name": "银桥利乐枕纯牛奶220g × 16", "qty": 7, "orders": 7}, {"value": 233.4, "name": "老哥俩稻花香5kg", "qty": 8, "orders": 8}, {"value": 233.7, "name": "鲁花低芥酸特香菜籽油5L", "qty": 3, "orders": 3}, {"value": 321.0, "name": "邦淇非转基因纯香菜籽油5L", "qty": 7, "orders": 4}, {"value": 396.0, "name": "米旗锦绣华月600g", "qty": 4, "orders": 2}, {"value": 441.0, "name": "米旗喜迎仲秋400g", "qty": 10, "orders": 6}, {"value": 484.4, "name": "银桥利乐枕核桃花生220g × 16", "qty": 19, "orders": 18}], barWidth: '58%',
+          itemStyle: { color: '#f59e0b' },
+          label: { show: true, position: 'inside', formatter: function(p) { return p.value > 0 ? '¥' + p.value : ''; } } },
+        { name: '已取消金额', type: 'bar', stack: 'a', data: [{"value": 27.8, "name": "德懋恭单色水晶饼500g", "qty": 3, "orders": 3}, {"value": 0.0, "name": "零优康鲜鸡蛋30枚", "qty": 5, "orders": 5}, {"value": 0.0, "name": "五得利高筋超精粉六星5kg", "qty": 9, "orders": 8}, {"value": 0.0, "name": "银桥利乐枕纯牛奶220g × 16", "qty": 7, "orders": 7}, {"value": 77.8, "name": "老哥俩稻花香5kg", "qty": 8, "orders": 8}, {"value": 0.0, "name": "鲁花低芥酸特香菜籽油5L", "qty": 3, "orders": 3}, {"value": 53.5, "name": "邦淇非转基因纯香菜籽油5L", "qty": 7, "orders": 4}, {"value": 0.0, "name": "米旗锦绣华月600g", "qty": 4, "orders": 2}, {"value": 49.0, "name": "米旗喜迎仲秋400g", "qty": 10, "orders": 6}, {"value": 91.7, "name": "银桥利乐枕核桃花生220g × 16", "qty": 19, "orders": 18}], barWidth: '58%',
+          itemStyle: { color: '#d1d5db', borderRadius: [0, 4, 4, 0] },
+          label: { show: true, position: 'right', color: '#9ca3af',
+                   formatter: function(p) { return p.value > 0 ? '取消 ¥' + p.value : ''; } } }
+    ]
+});
+
+// ---------- 板块三：抖音 ----------
+var dyCatChart = echarts.init(document.getElementById('dyCatChart'));
+charts.push(dyCatChart);
+dyCatChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var s = '<b>' + params[0].name + '</b>';
+        params.forEach(function(p) { s += '<br/>' + p.marker + p.seriesName + '：¥' + p.value; });
+        return s;
+    } },
+    legend: { data: ['成交金额', '核销金额', '退款金额'], top: 0 },
+    grid: { left: '3%', right: '6%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: ["代金券", "品牌代金券", "团购", "零售品"] },
+    yAxis: { type: 'value', name: '金额（元）' },
+    series: [
+        { name: '成交金额', type: 'bar', data: [45590.0, 680.0, 31436.1, 6441.9], barWidth: '20%',
+          itemStyle: { color: '#111827', borderRadius: [4, 4, 0, 0] },
+          label: { show: true, position: 'top', formatter: '¥{c}' } },
+        { name: '核销金额', type: 'bar', data: [13607.8, 590.0, 20937.8, 3315.1], barWidth: '20%',
+          itemStyle: { color: '#10b981', borderRadius: [4, 4, 0, 0] },
+          label: { show: true, position: 'top', formatter: '¥{c}' } },
+        { name: '退款金额', type: 'bar', data: [17358.2, 320.0, 18120.44, 3674.1], barWidth: '20%',
+          itemStyle: { color: '#ef4444', borderRadius: [4, 4, 0, 0] },
+          label: { show: true, position: 'top', formatter: '¥{c}' } }
+    ]
+});
+
+
+
+var dyItemChart = echarts.init(document.getElementById('dyItemChart'));
+charts.push(dyItemChart);
+dyItemChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var s = params[0].name + '<br/>成交券数：' + params[0].data.qty + ' 张';
+        params.forEach(function(p) { s += '<br/>' + p.marker + p.seriesName + '：¥' + p.value; });
+        return s;
+    } },
+    legend: { data: ['成交金额', '核销金额', '退款金额'], top: 0 },
+    grid: { left: '3%', right: '6%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '金额（元）' },
+    yAxis: { type: 'category', data: ["杂粮蛋30枚", "米旗八月十五500g", "鲜鸡蛋30枚居家必备", "红星大唐御礼8块装480g", "三只松鼠坚果礼祥瑞礼1070g", "米旗喜迎仲秋400g", "三只松鼠坚果礼瑞甄款1503g", "杂粮蛋30枚家庭厨房囤货必备", "50元代金券", "伊利金典纯牛奶250ml", "百事可乐六连包听装330ml", "青岛全麦白啤听装500ml*2露营野餐烧烤夜宵观赛双人小聚易拉罐啤酒", "果子熟了茶系列500ml*3", "家小美亲肤柔韧无芯卷纸14卷2000g家常备", "蒙牛特仑苏纯牛奶250ml", "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "橙味听装330ml*6连罐", "200元代金券", "100元代金券"], axisLabel: { width: 190, overflow: 'truncate' } },
+    series: [
+        { name: '成交金额', type: 'bar', data: [{"value": 135.0, "name": "杂粮蛋30枚", "qty": 6, "cat": "团购"}, {"value": 158.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 159.2, "name": "鲜鸡蛋30枚居家必备", "qty": 8, "cat": "团购"}, {"value": 192.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 195.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 196.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 245.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 538.0, "name": "杂粮蛋30枚家庭厨房囤货必备", "qty": 24, "cat": "零售品"}, {"value": 600.0, "name": "50元代金券", "qty": 12, "cat": "品牌代金券"}, {"value": 943.8, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 1168.2, "name": "百事可乐六连包听装330ml", "qty": 118, "cat": "团购"}, {"value": 1498.6, "name": "青岛全麦白啤听装500ml*2露营野餐烧烤夜宵观赛双人小聚易拉罐啤酒", "qty": 127, "cat": "团购"}, {"value": 1782.0, "name": "果子熟了茶系列500ml*3", "qty": 180, "cat": "团购"}, {"value": 1914.0, "name": "家小美亲肤柔韧无芯卷纸14卷2000g家常备", "qty": 132, "cat": "团购"}, {"value": 3732.3, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 5692.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 7968.9, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 11117.7, "name": "橙味听装330ml*6连罐", "qty": 1123, "cat": "团购"}, {"value": 18648.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 26752.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
+          itemStyle: {
+              borderRadius: [0, 4, 4, 0],
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); }
+          } },
+        { name: '核销金额', type: 'bar', data: [{"value": 45.0, "name": "杂粮蛋30枚", "qty": 6, "cat": "团购"}, {"value": 0.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 196.0, "name": "鲜鸡蛋30枚居家必备", "qty": 8, "cat": "团购"}, {"value": 53.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 0.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 45.0, "name": "杂粮蛋30枚家庭厨房囤货必备", "qty": 24, "cat": "零售品"}, {"value": 550.0, "name": "50元代金券", "qty": 12, "cat": "品牌代金券"}, {"value": 343.2, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 1157.3, "name": "百事可乐六连包听装330ml", "qty": 118, "cat": "团购"}, {"value": 1239.0, "name": "青岛全麦白啤听装500ml*2露营野餐烧烤夜宵观赛双人小聚易拉罐啤酒", "qty": 127, "cat": "团购"}, {"value": 1534.5, "name": "果子熟了茶系列500ml*3", "qty": 180, "cat": "团购"}, {"value": 1768.0, "name": "家小美亲肤柔韧无芯卷纸14卷2000g家常备", "qty": 132, "cat": "团购"}, {"value": 2445.3, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 3512.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 4576.2, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 6256.8, "name": "橙味听装330ml*6连罐", "qty": 1123, "cat": "团购"}, {"value": 3024.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 9328.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
+          itemStyle: {
+              borderRadius: [0, 4, 4, 0],
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); }
+          } },
+        { name: '退款金额', type: 'bar', data: [112.5, 158.0, 19.9, 139.0, 39.0, 147.0, 196.0, 540.0, 200.0, 343.2, 316.8, 283.2, 543.5, 971.5, 557.7, 2820.5, 4576.2, 5716.2, 4368.0, 8536.0], barWidth: '26%',
+          itemStyle: { color: '#ef4444', borderRadius: [0, 4, 4, 0] } }
+    ]
+});
+
+var dyStoreChart = echarts.init(document.getElementById('dyStoreChart'));
+charts.push(dyStoreChart);
+var dyOwnerPalette = {
+    '段磊': '#ff6b35', '冯卓': '#d97706', '高雅静': '#f59e0b', '桓伟': '#84cc16',
+    '李帆帆': '#10b981', '李晓攀': '#06b6d4', '李亚兵': '#3b82f6', '刘世延': '#6366f1',
+    '谢泽': '#8b5cf6', '张金颖': '#ec4899', '周彬': '#f43f5e', '未分配': '#9ca3af'
+};
+dyStoreChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        return p.name + '<br/>督导：' + (p.data.owner || '未分配') +
+               '<br/>核销金额：<b>¥' + p.value + '</b> ｜ ' + p.data.cnt + ' 笔';
+    } },
+    legend: { data: Object.keys(dyOwnerPalette), type: 'scroll', top: 0,
+              textStyle: { fontSize: 11, color: '#374151' } },
+    grid: { left: '3%', right: '10%', bottom: '3%', top: 40, containLabel: true },
+    xAxis: { type: 'value', name: '核销金额（元）' },
+    yAxis: { type: 'category', data: ["零满多省钱超市(御锦城2店)", "零满多折扣批发超市(杨官寨店)", "零满多省钱超市(合能十里锦绣店)", "零满多折扣批发超市(3507店)", "零满多省钱超市(长安西路店)", "零满多省钱超市(东城新一家店)", "零满多省钱超市(红星美凯城店)", "零满多省钱超市(中航华府店)", "零满多批发超市(青年南街店)", "零满多省钱超市(福景祥苑店)", "零满多省钱超市(南沈新苑店)", "零满多省钱超市(宏府鹍翔九天店)", "零满多省钱超市(杜永村店)", "零满多省钱超市(上塔坡店)", "零满多(草场坡店)", "零满多批发折扣超市(铁安一街店)", "零满多省钱超市(南小巷羽源欣居店)", "零满多折扣批发超市(二十四城店)", "零满多(御河宸院店)", "零满多省钱超市(渭南高新万达店)", "零满多折扣批发超市(兴隆兴苑店)", "零满多省钱超市(绿地璀璨天城店)", "零满多省钱超市(华胥镇店)", "零满多折扣批发超市(锦绣秦川店)", "零满多省钱超市(全运村店)", "零满多(隆清城小区店)", "零满多省钱超市(安化门店)", "零满多折扣批发超市(袁雒小区店)", "零满多省钱超市(人民西路店)", "零满多省钱超市(渭南市仓程路店)"], axisLabel: { width: 200, overflow: 'truncate' } },
+    series: [{
+        type: 'bar', data: [{"value": 551.3, "name": "零满多省钱超市(御锦城2店)", "cnt": 19, "owner": "谢泽"}, {"value": 577.1, "name": "零满多折扣批发超市(杨官寨店)", "cnt": 24, "owner": "冯卓"}, {"value": 586.6, "name": "零满多省钱超市(合能十里锦绣店)", "cnt": 28, "owner": "谢泽"}, {"value": 608.1, "name": "零满多折扣批发超市(3507店)", "cnt": 14, "owner": "未分配"}, {"value": 631.6, "name": "零满多省钱超市(长安西路店)", "cnt": 24, "owner": "段磊"}, {"value": 632.5, "name": "零满多省钱超市(东城新一家店)", "cnt": 18, "owner": "谢泽"}, {"value": 666.2, "name": "零满多省钱超市(红星美凯城店)", "cnt": 28, "owner": "谢泽"}, {"value": 671.8, "name": "零满多省钱超市(中航华府店)", "cnt": 22, "owner": "高雅静"}, {"value": 686.7, "name": "零满多批发超市(青年南街店)", "cnt": 39, "owner": "桓伟"}, {"value": 735.3, "name": "零满多省钱超市(福景祥苑店)", "cnt": 27, "owner": "李帆帆"}, {"value": 744.1, "name": "零满多省钱超市(南沈新苑店)", "cnt": 20, "owner": "高雅静"}, {"value": 749.3, "name": "零满多省钱超市(宏府鹍翔九天店)", "cnt": 29, "owner": "李晓攀"}, {"value": 787.9, "name": "零满多省钱超市(杜永村店)", "cnt": 35, "owner": "高雅静"}, {"value": 804.4, "name": "零满多省钱超市(上塔坡店)", "cnt": 36, "owner": "高雅静"}, {"value": 816.8, "name": "零满多(草场坡店)", "cnt": 23, "owner": "李晓攀"}, {"value": 817.7, "name": "零满多批发折扣超市(铁安一街店)", "cnt": 38, "owner": "李晓攀"}, {"value": 849.8, "name": "零满多省钱超市(南小巷羽源欣居店)", "cnt": 52, "owner": "李晓攀"}, {"value": 856.6, "name": "零满多折扣批发超市(二十四城店)", "cnt": 34, "owner": "刘世延"}, {"value": 860.6, "name": "零满多(御河宸院店)", "cnt": 39, "owner": "张金颖"}, {"value": 902.3, "name": "零满多省钱超市(渭南高新万达店)", "cnt": 40, "owner": "李亚兵"}, {"value": 903.3, "name": "零满多折扣批发超市(兴隆兴苑店)", "cnt": 44, "owner": "未分配"}, {"value": 921.0, "name": "零满多省钱超市(绿地璀璨天城店)", "cnt": 33, "owner": "谢泽"}, {"value": 972.1, "name": "零满多省钱超市(华胥镇店)", "cnt": 42, "owner": "段磊"}, {"value": 1054.4, "name": "零满多折扣批发超市(锦绣秦川店)", "cnt": 52, "owner": "张金颖"}, {"value": 1057.6, "name": "零满多省钱超市(全运村店)", "cnt": 24, "owner": "谢泽"}, {"value": 1101.1, "name": "零满多(隆清城小区店)", "cnt": 50, "owner": "周彬"}, {"value": 1125.8, "name": "零满多省钱超市(安化门店)", "cnt": 39, "owner": "高雅静"}, {"value": 1213.7, "name": "零满多折扣批发超市(袁雒小区店)", "cnt": 43, "owner": "谢泽"}, {"value": 1228.6, "name": "零满多省钱超市(人民西路店)", "cnt": 40, "owner": "李帆帆"}, {"value": 1483.8, "name": "零满多省钱超市(渭南市仓程路店)", "cnt": 66, "owner": "未分配"}], barWidth: '60%',
+        itemStyle: {
+            color: function(params) { return dyOwnerPalette[params.data.owner] || '#9ca3af'; },
+            borderRadius: [0, 4, 4, 0]
+        },
+        label: { show: true, position: 'right', formatter: function(p) { return '¥' + p.value; } }
+    }]
+});
+
+var dyZyItemChart = echarts.init(document.getElementById('dyZyItemChart'));
+charts.push(dyZyItemChart);
+dyZyItemChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var s = params[0].name + '<br/>成交券数：' + params[0].data.qty + ' 张';
+        params.forEach(function(p) { s += '<br/>' + p.marker + p.seriesName + '：¥' + p.value; });
+        return s;
+    } },
+    legend: { data: ['成交金额', '核销金额', '退款金额'], top: 0 },
+    grid: { left: '3%', right: '6%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', name: '金额（元）' },
+    yAxis: { type: 'category', data: ["德懋恭单色水晶饼500g", "米旗花好月圆450g", "米旗八月十五500g", "红星大唐御礼8块装480g", "三只松鼠坚果礼祥瑞礼1070g", "米旗喜迎仲秋400g", "三只松鼠坚果礼瑞甄款1503g", "伊利金典纯牛奶250ml", "蒙牛特仑苏纯牛奶250ml", "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "200元代金券", "100元代金券"], axisLabel: { width: 190, overflow: 'truncate' } },
+    series: [
+        { name: '成交金额', type: 'bar', data: [{"value": 111.2, "name": "德懋恭单色水晶饼500g", "qty": 4, "cat": "零售品"}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 2, "cat": "零售品"}, {"value": 158.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 192.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 195.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 196.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 245.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 943.8, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 3732.3, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 5692.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 7968.9, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 18648.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 26752.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
+          itemStyle: { borderRadius: [0, 4, 4, 0],
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); } } },
+        { name: '核销金额', type: 'bar', data: [{"value": 0.0, "name": "德懋恭单色水晶饼500g", "qty": 4, "cat": "零售品"}, {"value": 0.0, "name": "米旗花好月圆450g", "qty": 2, "cat": "零售品"}, {"value": 0.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 53.6, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 0.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 0.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 343.2, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 2445.3, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 3512.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 4576.2, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 3024.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 9328.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
+          itemStyle: { borderRadius: [0, 4, 4, 0],
+              color: function(p) { return p.data.cat === '代金券' ? '#b45309' : (p.data.cat === '品牌代金券' ? '#c2410c' : (p.data.cat === '团购' ? '#0f766e' : '#7c3aed')); } } },
+        { name: '退款金额', type: 'bar', data: [{"value": 55.6, "name": "德懋恭单色水晶饼500g", "qty": 4, "cat": "零售品"}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 2, "cat": "零售品"}, {"value": 158.0, "name": "米旗八月十五500g", "qty": 2, "cat": "零售品"}, {"value": 139.0, "name": "红星大唐御礼8块装480g", "qty": 7, "cat": "零售品"}, {"value": 39.0, "name": "三只松鼠坚果礼祥瑞礼1070g", "qty": 5, "cat": "零售品"}, {"value": 147.0, "name": "米旗喜迎仲秋400g", "qty": 4, "cat": "零售品"}, {"value": 196.0, "name": "三只松鼠坚果礼瑞甄款1503g", "qty": 5, "cat": "零售品"}, {"value": 343.2, "name": "伊利金典纯牛奶250ml", "qty": 22, "cat": "零售品"}, {"value": 557.7, "name": "蒙牛特仑苏纯牛奶250ml", "qty": 87, "cat": "零售品"}, {"value": 2820.5, "name": "香满园美味富强小麦粉5kg蒸饺馒头烙饼面食烘焙家庭囤货袋装小麦粉", "qty": 345, "cat": "团购"}, {"value": 4576.2, "name": "鲁花低芥酸特香菜籽油5L日常炒菜家宴煎炸炖煮家庭囤货桶装食用油", "qty": 101, "cat": "团购"}, {"value": 4368.0, "name": "200元代金券", "qty": 111, "cat": "代金券"}, {"value": 8536.0, "name": "100元代金券", "qty": 304, "cat": "代金券"}], barWidth: '26%',
+          itemStyle: { color: '#ef4444', borderRadius: [0, 4, 4, 0] } }
+    ]
+});
+
+var dyZyStoreChart = echarts.init(document.getElementById('dyZyStoreChart'));
+charts.push(dyZyStoreChart);
+dyZyStoreChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+        var p = params[0];
+        return p.name + '<br/>督导：' + (p.data.owner || '未分配') +
+               '<br/>核销金额：<b>¥' + p.value + '</b> ｜ ' + p.data.cnt + ' 笔';
+    } },
+    legend: { data: Object.keys(dyOwnerPalette), type: 'scroll', top: 0,
+              textStyle: { fontSize: 11, color: '#374151' } },
+    grid: { left: '3%', right: '10%', bottom: '3%', top: 40, containLabel: true },
+    xAxis: { type: 'value', name: '核销金额（元）' },
+    yAxis: { type: 'category', data: ["零满多省钱超市(阳光台365店)", "零满多省钱超市(御锦城2店)", "零满多折扣批发超市(杨官寨店)", "零满多省钱超市(合能十里锦绣店)", "零满多省钱超市(长安西路店)", "零满多省钱超市(福景祥苑店)", "零满多折扣批发超市(兴隆兴苑店)", "零满多省钱超市(红星美凯城店)", "零满多折扣批发超市(锦绣秦川店)", "零满多折扣批发超市(3507店)", "零满多批发折扣超市(铁安一街店)", "零满多省钱超市(南小巷羽源欣居店)", "零满多省钱超市(杜永村店)", "零满多省钱超市(上塔坡店)", "零满多省钱超市(东城新一家店)", "零满多省钱超市(宏府鹍翔九天店)", "零满多(御河宸院店)", "零满多省钱超市(渭南高新万达店)", "零满多省钱超市(中航华府店)", "零满多(隆清城小区店)", "零满多折扣批发超市(二十四城店)", "零满多省钱超市(绿地璀璨天城店)", "零满多省钱超市(华胥镇店)", "零满多省钱超市(南沈新苑店)", "零满多(草场坡店)", "零满多省钱超市(全运村店)", "零满多省钱超市(安化门店)", "零满多折扣批发超市(袁雒小区店)", "零满多省钱超市(渭南市仓程路店)", "零满多省钱超市(人民西路店)"], axisLabel: { width: 200, overflow: 'truncate' } },
+    series: [{
+        type: 'bar', data: [{"value": 344.0, "name": "零满多省钱超市(阳光台365店)", "cnt": 3, "owner": "刘世延"}, {"value": 350.3, "name": "零满多省钱超市(御锦城2店)", "cnt": 5, "owner": "谢泽"}, {"value": 364.1, "name": "零满多折扣批发超市(杨官寨店)", "cnt": 7, "owner": "冯卓"}, {"value": 372.9, "name": "零满多省钱超市(合能十里锦绣店)", "cnt": 8, "owner": "谢泽"}, {"value": 393.5, "name": "零满多省钱超市(长安西路店)", "cnt": 6, "owner": "段磊"}, {"value": 440.0, "name": "零满多省钱超市(福景祥苑店)", "cnt": 5, "owner": "李帆帆"}, {"value": 444.1, "name": "零满多折扣批发超市(兴隆兴苑店)", "cnt": 7, "owner": "未分配"}, {"value": 445.7, "name": "零满多省钱超市(红星美凯城店)", "cnt": 7, "owner": "谢泽"}, {"value": 452.1, "name": "零满多折扣批发超市(锦绣秦川店)", "cnt": 13, "owner": "张金颖"}, {"value": 491.4, "name": "零满多折扣批发超市(3507店)", "cnt": 6, "owner": "未分配"}, {"value": 493.9, "name": "零满多批发折扣超市(铁安一街店)", "cnt": 11, "owner": "李晓攀"}, {"value": 494.1, "name": "零满多省钱超市(南小巷羽源欣居店)", "cnt": 17, "owner": "李晓攀"}, {"value": 495.8, "name": "零满多省钱超市(杜永村店)", "cnt": 9, "owner": "高雅静"}, {"value": 513.7, "name": "零满多省钱超市(上塔坡店)", "cnt": 9, "owner": "高雅静"}, {"value": 533.1, "name": "零满多省钱超市(东城新一家店)", "cnt": 8, "owner": "谢泽"}, {"value": 539.9, "name": "零满多省钱超市(宏府鹍翔九天店)", "cnt": 9, "owner": "李晓攀"}, {"value": 545.5, "name": "零满多(御河宸院店)", "cnt": 12, "owner": "张金颖"}, {"value": 564.8, "name": "零满多省钱超市(渭南高新万达店)", "cnt": 11, "owner": "李亚兵"}, {"value": 572.8, "name": "零满多省钱超市(中航华府店)", "cnt": 12, "owner": "高雅静"}, {"value": 578.0, "name": "零满多(隆清城小区店)", "cnt": 14, "owner": "周彬"}, {"value": 583.5, "name": "零满多折扣批发超市(二十四城店)", "cnt": 10, "owner": "刘世延"}, {"value": 603.0, "name": "零满多省钱超市(绿地璀璨天城店)", "cnt": 9, "owner": "谢泽"}, {"value": 608.3, "name": "零满多省钱超市(华胥镇店)", "cnt": 12, "owner": "段磊"}, {"value": 623.4, "name": "零满多省钱超市(南沈新苑店)", "cnt": 8, "owner": "高雅静"}, {"value": 681.6, "name": "零满多(草场坡店)", "cnt": 10, "owner": "李晓攀"}, {"value": 769.7, "name": "零满多省钱超市(全运村店)", "cnt": 11, "owner": "谢泽"}, {"value": 896.2, "name": "零满多省钱超市(安化门店)", "cnt": 17, "owner": "高雅静"}, {"value": 918.4, "name": "零满多折扣批发超市(袁雒小区店)", "cnt": 13, "owner": "谢泽"}, {"value": 971.5, "name": "零满多省钱超市(渭南市仓程路店)", "cnt": 27, "owner": "未分配"}, {"value": 1036.5, "name": "零满多省钱超市(人民西路店)", "cnt": 25, "owner": "李帆帆"}], barWidth: '60%',
+        itemStyle: {
+            color: function(params) { return dyOwnerPalette[params.data.owner] || '#9ca3af'; },
+            borderRadius: [0, 4, 4, 0]
+        },
+        label: { show: true, position: 'right', formatter: function(p) { return '¥' + p.value; } }
+    }]
+});
+
+window.addEventListener('resize', function() {
+    charts.forEach(function(c) { c.resize(); });
+});
+</script>
+</body>
+</html>
