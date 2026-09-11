@@ -131,7 +131,7 @@ body {
     <div class="header">
         <h1>零满多 · 9月营销活动数据看板</h1>
         <div class="subtitle">康师傅福利券 ｜ 小程序销售（含月饼预售）｜ 抖音来客</div>
-        <div class="update-time">数据更新时间：2026-09-11 17:36 ｜ 数据源：9月品牌部数据（月累计）</div>
+        <div class="update-time">数据更新时间：2026-09-11 18:03 ｜ 数据源：9月品牌部数据（月累计）</div>
     </div>
 
     <div class="nav">
@@ -155,23 +155,23 @@ body {
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">累计领取</div>
-                <div class="kpi-value">2531<span class="kpi-unit">张</span></div>
-                <div class="kpi-note">占限量 105.5% ｜ 两期合计</div>
+                <div class="kpi-value">1897<span class="kpi-unit">张</span></div>
+                <div class="kpi-note">占限量 79.0% ｜ 两期合计</div>
             </div>
             <div class="kpi-card red">
-                <div class="kpi-label">已超限量</div>
-                <div class="kpi-value">0<span class="kpi-unit">张</span></div>
-                <div class="kpi-note">累计领取比限量多 131 张（两期投放超量，需复核）</div>
+                <div class="kpi-label">剩余预算</div>
+                <div class="kpi-value">503<span class="kpi-unit">张</span></div>
+                <div class="kpi-note">占限量 21.0%</div>
             </div>
             <div class="kpi-card green">
                 <div class="kpi-label">已核销</div>
                 <div class="kpi-value">1689<span class="kpi-unit">张</span></div>
-                <div class="kpi-note">核销率 66.7% ｜ 占限量 70.4%</div>
+                <div class="kpi-note">核销率 89.0% ｜ 占限量 70.4%</div>
             </div>
             <div class="kpi-card purple">
                 <div class="kpi-label">核销门店</div>
                 <div class="kpi-value">81<span class="kpi-unit">家</span></div>
-                <div class="kpi-note">已使用 1689 张 ｜ 未使用 842 张</div>
+                <div class="kpi-note">已使用 1689 张 ｜ 未使用 208 张</div>
             </div>
         </div>
         <div class="chart-grid">
@@ -180,7 +180,7 @@ body {
                 <div id="funnelChart" class="chart"></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">发放券核销状态（共 2531 张）</div>
+                <div class="chart-title">发放券核销状态（共 1897 张）</div>
                 <div id="cfStatusChart" class="chart"></div>
             </div>
             <div class="chart-card full">
@@ -722,7 +722,7 @@ funnelChart.setOption({
     tooltip: { trigger: 'item', formatter: function(p) {
         if (p.name === '总限量') return p.name + '：' + p.value + ' 张';
         if (p.name === '已发放') return '已发放：' + p.value + ' 张<br/>占限量 ' + (p.value / 2400 * 100).toFixed(1) + '%';
-        return '已核销：' + p.value + ' 张<br/>占发放 66.7%<br/>占限量 ' + (p.value / 2400 * 100).toFixed(1) + '%';
+        return '已核销：' + p.value + ' 张<br/>占发放 89.0%<br/>占限量 ' + (p.value / 2400 * 100).toFixed(1) + '%';
     } },
     legend: { bottom: '2%', data: ['总限量', '已发放', '已核销'] },
     color: ['#e5e7eb', '#f7931e', '#ff6b35'],
@@ -742,7 +742,7 @@ funnelChart.setOption({
         itemStyle: { borderColor: '#fff', borderWidth: 2 },
         data: [
             { value: 2400, name: '总限量', label: { color: '#000000', fontWeight: 'bold' } },
-            { value: 2531, name: '已发放', label: { color: '#ffffff' } },
+            { value: 1897, name: '已发放', label: { color: '#ffffff' } },
             { value: 1689, name: '已核销', label: { color: '#ffffff' } }
         ]
     }]
@@ -760,7 +760,7 @@ cfStatusChart.setOption({
         label: { show: true, formatter: '{b}\n{c}张\n{d}%' },
         data: [
             { value: 1689, name: '已使用' },
-            { value: 842, name: '未使用' }
+            { value: 208, name: '未使用' }
         ]
     }]
 });
@@ -776,7 +776,7 @@ cfDayChart.setOption({
         { type: 'value', name: '数量（张）' },
         { type: 'value', name: '核销率', axisLabel: { formatter: '{value}%' }, max: 100 }
     ],
-    series: [{"name": "领取", "type": "bar", "data": [380, 248, 309, 263, 292, 295, 210, 143, 232, 159], "barWidth": "28%", "itemStyle": {"color": "#60a5fa", "borderRadius": [4, 4, 0, 0]}, "label": {"show": true, "position": "top"}}]
+    series: [{"name": "领取", "type": "bar", "data": [207, 122, 248, 178, 190, 208, 210, 143, 232, 159], "barWidth": "28%", "itemStyle": {"color": "#60a5fa", "borderRadius": [4, 4, 0, 0]}, "label": {"show": true, "position": "top"}}]
 });
 
 var storeChart = echarts.init(document.getElementById('storeChart'));
