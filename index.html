@@ -131,7 +131,7 @@ body {
     <div class="header">
         <h1>零满多 · 9月营销活动数据看板</h1>
         <div class="subtitle">康师傅福利券 ｜ 小程序销售（含月饼预售）｜ 抖音来客</div>
-        <div class="update-time">数据更新时间：2026-09-16 10:43 ｜ 数据源：9月品牌部数据（月累计）</div>
+        <div class="update-time">数据更新时间：2026-09-19 14:13 ｜ 数据源：9月品牌部数据（月累计）</div>
     </div>
 
     <div class="nav">
@@ -390,40 +390,40 @@ body {
         <div class="section-head">
             <span class="badge xc">二</span>
             <h2>小程序销售（月累计）</h2>
-            <span class="meta">预售 / 商城 / 秒杀 ｜ 统计区间 09-01 ~ 09-15</span>
+            <span class="meta">预售 / 商城 / 秒杀 ｜ 统计区间 09-01 ~ 09-18</span>
         </div>
         <div class="kpi-grid">
             <div class="kpi-card amber">
                 <div class="kpi-label">总订单数</div>
-                <div class="kpi-value">200<span class="kpi-unit">单</span></div>
-                <div class="kpi-note">已取消 35 单（取消率 17.5%）</div>
+                <div class="kpi-value">223<span class="kpi-unit">单</span></div>
+                <div class="kpi-note">已取消 41 单（取消率 18.4%）</div>
             </div>
             <div class="kpi-card green">
                 <div class="kpi-label">支付金额</div>
-                <div class="kpi-value">¥7151.6</div>
-                <div class="kpi-note">有效订单金额 ¥6271.4</div>
+                <div class="kpi-value">¥7586.2</div>
+                <div class="kpi-note">有效订单金额 ¥6584.4</div>
             </div>
             <div class="kpi-card blue">
                 <div class="kpi-label">销售件数</div>
-                <div class="kpi-value">291<span class="kpi-unit">件</span></div>
-                <div class="kpi-note">有效订单 165 单</div>
+                <div class="kpi-value">325<span class="kpi-unit">件</span></div>
+                <div class="kpi-note">有效订单 182 单</div>
             </div>
             <div class="kpi-card purple">
                 <div class="kpi-label">核销进度</div>
-                <div class="kpi-value">135<span class="kpi-unit">单已核销</span></div>
-                <div class="kpi-note">待核销 30 单</div>
+                <div class="kpi-value">161<span class="kpi-unit">单已核销</span></div>
+                <div class="kpi-note">待核销 21 单</div>
             </div>
             <div class="kpi-card red">
                 <div class="kpi-label">覆盖门店</div>
-                <div class="kpi-value">41<span class="kpi-unit">家</span></div>
+                <div class="kpi-value">44<span class="kpi-unit">家</span></div>
                 <div class="kpi-note">小程序全渠道订单</div>
             </div>
         </div>
 
         <div class="sub-kpi">
             <div class="box"><div class="t">月饼预售订单（订单类型=预售）</div><div class="v">47 单 · ¥4090.6</div></div>
-            <div class="box"><div class="t">预售已核销</div><div class="v">34 单 · ¥3453.7</div></div>
-            <div class="box"><div class="t">预售待核销</div><div class="v">7 单</div></div>
+            <div class="box"><div class="t">预售已核销</div><div class="v">36 单 · ¥3570.5</div></div>
+            <div class="box"><div class="t">预售待核销</div><div class="v">5 单</div></div>
             <div class="box"><div class="t">预售覆盖门店</div><div class="v">21 家</div></div>
         </div>
 
@@ -839,7 +839,7 @@ xcTypeChart.setOption({
         type: 'pie', radius: ['42%', '68%'], center: ['50%', '45%'],
         itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
         label: { show: true, formatter: function(p) { return p.name + '\n' + p.value + '单\n¥' + p.data.amt; } },
-        data: [{"value": 47, "name": "预售", "amt": 4090.6}, {"value": 26, "name": "商城", "amt": 274.8}, {"value": 127, "name": "秒杀", "amt": 2786.2}]
+        data: [{"value": 47, "name": "预售", "amt": 4090.6}, {"value": 37, "name": "商城", "amt": 580.6}, {"value": 139, "name": "秒杀", "amt": 2915.0}]
     }]
 });
 
@@ -855,7 +855,7 @@ xcStatusChart.setOption({
         type: 'pie', radius: ['42%', '68%'], center: ['50%', '45%'],
         itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
         label: { show: true, formatter: function(p) { return p.name + '\n' + p.value + '单\n¥' + p.data.amt; } },
-        data: [{"value": 135, "name": "已核销", "amt": 5464.4}, {"value": 30, "name": "待核销", "amt": 807.0}, {"value": 35, "name": "已取消", "amt": 880.2}]
+        data: [{"value": 161, "name": "已核销", "amt": 5994.0}, {"value": 21, "name": "待核销", "amt": 590.4}, {"value": 41, "name": "已取消", "amt": 1001.8}]
     }]
 });
 
@@ -869,9 +869,9 @@ xcStoreChart.setOption({
     } },
     grid: { left: '3%', right: '10%', bottom: '3%', containLabel: true },
     xAxis: { type: 'value', name: '金额（元）' },
-    yAxis: { type: 'category', data: ["零满多招商央畔店", "零满多渭南高新万达店", "零满多御锦城2店", "零满多咸阳西华路店", "零满多海璟时代店", "零满多甘家寨店", "零满多航天城天谐苑店", "零满多御河宸院店", "零满多曹村店", "零满多阳光城丽兹公馆店", "零满多中南春风南岸店", "零满多恒大帝景店", "零满多安诚御花苑店", "零满多安化门店", "零满多中航华府店", "零满多宏府鹍翔九天店", "零满多御锦城店", "零满多西铁一中店", "零满多长里村店", "零满多杨官寨店", "零满多利君未来城店", "零满多袁雒店", "零满多崇文佳苑店", "零满多西安宸院店", "零满多田家湾店", "零满多凤城四路店", "零满多昆明池路店", "零满多雅居乐店", "零满多金泰店", "零满多璀璨天城店", "零满多兰乔国际城店", "零满多兴隆鑫苑店", "零满多福景祥苑店", "零满多国宾中央店", "零满多长安西路店", "零满多青年南街店", "零满多上塔坡店", "零满多隆清城店", "零满多锦绣秦川店", "零满多铁安一街店", "零满多华润二十四城店"], axisLabel: { width: 180, overflow: 'truncate' } },
+    yAxis: { type: 'category', data: ["零满多招商央畔店", "零满多渭南高新万达店", "零满多咸阳西华路店", "零满多南沈新苑店", "零满多御锦城2店", "零满多海璟时代店", "零满多羽源欣居店", "零满多航天城天谐苑店", "零满多御河宸院店", "零满多曹村店", "零满多阳光城丽兹公馆店", "零满多甘家寨店", "零满多恒大帝景店", "零满多安诚御花苑店", "零满多安化门店", "零满多中南春风南岸店", "零满多宏府鹍翔九天店", "零满多御锦城店", "零满多中航华府店", "零满多长里村店", "零满多杨官寨店", "零满多西铁一中店", "零满多利君未来城店", "零满多熙悦便利店", "零满多崇文佳苑店", "零满多袁雒店", "零满多田家湾店", "零满多凤城四路店", "零满多西安宸院店", "零满多雅居乐店", "零满多昆明池路店", "零满多金泰店", "零满多璀璨天城店", "零满多兰乔国际城店", "零满多兴隆鑫苑店", "零满多国宾中央店", "零满多长安西路店", "零满多福景祥苑店", "零满多上塔坡店", "零满多隆清城店", "零满多锦绣秦川店", "零满多青年南街店", "零满多铁安一街店", "零满多华润二十四城店"], axisLabel: { width: 180, overflow: 'truncate' } },
     series: [{
-        type: 'bar', data: [{"value": 7.0, "name": "零满多招商央畔店", "qty": 2, "owner": "谢泽"}, {"value": 8.5, "name": "零满多渭南高新万达店", "qty": 1, "owner": "李亚兵"}, {"value": 8.9, "name": "零满多御锦城2店", "qty": 1, "owner": "谢泽"}, {"value": 8.9, "name": "零满多咸阳西华路店", "qty": 1, "owner": "张金颖"}, {"value": 8.9, "name": "零满多海璟时代店", "qty": 1, "owner": "刘世延"}, {"value": 9.9, "name": "零满多甘家寨店", "qty": 1, "owner": "高雅静"}, {"value": 14.9, "name": "零满多航天城天谐苑店", "qty": 1, "owner": "周彬"}, {"value": 15.4, "name": "零满多御河宸院店", "qty": 2, "owner": "张金颖"}, {"value": 17.8, "name": "零满多曹村店", "qty": 2, "owner": "周彬"}, {"value": 17.8, "name": "零满多阳光城丽兹公馆店", "qty": 2, "owner": "段磊"}, {"value": 18.9, "name": "零满多中南春风南岸店", "qty": 1, "owner": "高雅静"}, {"value": 27.7, "name": "零满多恒大帝景店", "qty": 3, "owner": "谢泽"}, {"value": 27.8, "name": "零满多安诚御花苑店", "qty": 1, "owner": "谢泽"}, {"value": 27.8, "name": "零满多安化门店", "qty": 1, "owner": "高雅静"}, {"value": 36.7, "name": "零满多中航华府店", "qty": 3, "owner": "高雅静"}, {"value": 37.7, "name": "零满多宏府鹍翔九天店", "qty": 3, "owner": "高雅静"}, {"value": 37.8, "name": "零满多御锦城店", "qty": 2, "owner": "谢泽"}, {"value": 48.5, "name": "零满多西铁一中店", "qty": 3, "owner": "高雅静"}, {"value": 49.0, "name": "零满多长里村店", "qty": 1, "owner": "桓伟"}, {"value": 51.6, "name": "零满多杨官寨店", "qty": 3, "owner": "冯卓"}, {"value": 68.8, "name": "零满多利君未来城店", "qty": 3, "owner": "刘世延"}, {"value": 90.9, "name": "零满多袁雒店", "qty": 4, "owner": "李帆帆"}, {"value": 97.0, "name": "零满多崇文佳苑店", "qty": 6, "owner": "冯卓"}, {"value": 102.5, "name": "零满多西安宸院店", "qty": 5, "owner": "高雅静"}, {"value": 108.9, "name": "零满多田家湾店", "qty": 15, "owner": "谢泽"}, {"value": 117.9, "name": "零满多凤城四路店", "qty": 7, "owner": "刘世延"}, {"value": 144.7, "name": "零满多昆明池路店", "qty": 3, "owner": "高雅静"}, {"value": 155.5, "name": "零满多雅居乐店", "qty": 5, "owner": "周彬"}, {"value": 171.9, "name": "零满多金泰店", "qty": 7, "owner": "未分配"}, {"value": 183.6, "name": "零满多璀璨天城店", "qty": 5, "owner": "谢泽"}, {"value": 214.0, "name": "零满多兰乔国际城店", "qty": 4, "owner": "桓伟"}, {"value": 261.2, "name": "零满多兴隆鑫苑店", "qty": 22, "owner": "周彬"}, {"value": 290.1, "name": "零满多福景祥苑店", "qty": 20, "owner": "李帆帆"}, {"value": 296.2, "name": "零满多国宾中央店", "qty": 16, "owner": "段磊"}, {"value": 298.2, "name": "零满多长安西路店", "qty": 11, "owner": "段磊"}, {"value": 366.9, "name": "零满多青年南街店", "qty": 21, "owner": "桓伟"}, {"value": 430.6, "name": "零满多上塔坡店", "qty": 7, "owner": "高雅静"}, {"value": 430.7, "name": "零满多隆清城店", "qty": 14, "owner": "周彬"}, {"value": 436.8, "name": "零满多锦绣秦川店", "qty": 17, "owner": "张金颖"}, {"value": 498.2, "name": "零满多铁安一街店", "qty": 13, "owner": "段磊"}, {"value": 1905.5, "name": "零满多华润二十四城店", "qty": 51, "owner": "张金颖"}], barWidth: '60%',
+        type: 'bar', data: [{"value": 7.0, "name": "零满多招商央畔店", "qty": 2, "owner": "谢泽"}, {"value": 8.5, "name": "零满多渭南高新万达店", "qty": 1, "owner": "李亚兵"}, {"value": 8.9, "name": "零满多咸阳西华路店", "qty": 1, "owner": "张金颖"}, {"value": 8.9, "name": "零满多南沈新苑店", "qty": 1, "owner": "高雅静"}, {"value": 8.9, "name": "零满多御锦城2店", "qty": 1, "owner": "谢泽"}, {"value": 8.9, "name": "零满多海璟时代店", "qty": 1, "owner": "刘世延"}, {"value": 8.9, "name": "零满多羽源欣居店", "qty": 1, "owner": "高雅静"}, {"value": 14.9, "name": "零满多航天城天谐苑店", "qty": 1, "owner": "周彬"}, {"value": 15.4, "name": "零满多御河宸院店", "qty": 2, "owner": "张金颖"}, {"value": 17.8, "name": "零满多曹村店", "qty": 2, "owner": "周彬"}, {"value": 17.8, "name": "零满多阳光城丽兹公馆店", "qty": 2, "owner": "段磊"}, {"value": 19.8, "name": "零满多甘家寨店", "qty": 2, "owner": "高雅静"}, {"value": 27.7, "name": "零满多恒大帝景店", "qty": 3, "owner": "谢泽"}, {"value": 27.8, "name": "零满多安诚御花苑店", "qty": 1, "owner": "谢泽"}, {"value": 27.8, "name": "零满多安化门店", "qty": 1, "owner": "高雅静"}, {"value": 35.8, "name": "零满多中南春风南岸店", "qty": 2, "owner": "高雅静"}, {"value": 37.7, "name": "零满多宏府鹍翔九天店", "qty": 3, "owner": "高雅静"}, {"value": 37.8, "name": "零满多御锦城店", "qty": 2, "owner": "谢泽"}, {"value": 45.6, "name": "零满多中航华府店", "qty": 4, "owner": "高雅静"}, {"value": 49.0, "name": "零满多长里村店", "qty": 1, "owner": "桓伟"}, {"value": 51.6, "name": "零满多杨官寨店", "qty": 3, "owner": "冯卓"}, {"value": 57.4, "name": "零满多西铁一中店", "qty": 4, "owner": "高雅静"}, {"value": 68.8, "name": "零满多利君未来城店", "qty": 3, "owner": "刘世延"}, {"value": 84.0, "name": "零满多熙悦便利店", "qty": 8, "owner": "未分配"}, {"value": 97.0, "name": "零满多崇文佳苑店", "qty": 6, "owner": "冯卓"}, {"value": 99.8, "name": "零满多袁雒店", "qty": 5, "owner": "李帆帆"}, {"value": 108.9, "name": "零满多田家湾店", "qty": 15, "owner": "谢泽"}, {"value": 117.9, "name": "零满多凤城四路店", "qty": 7, "owner": "刘世延"}, {"value": 131.3, "name": "零满多西安宸院店", "qty": 7, "owner": "高雅静"}, {"value": 164.4, "name": "零满多雅居乐店", "qty": 6, "owner": "周彬"}, {"value": 166.4, "name": "零满多昆明池路店", "qty": 6, "owner": "高雅静"}, {"value": 180.8, "name": "零满多金泰店", "qty": 8, "owner": "未分配"}, {"value": 183.6, "name": "零满多璀璨天城店", "qty": 5, "owner": "谢泽"}, {"value": 214.0, "name": "零满多兰乔国际城店", "qty": 4, "owner": "桓伟"}, {"value": 261.2, "name": "零满多兴隆鑫苑店", "qty": 22, "owner": "周彬"}, {"value": 296.2, "name": "零满多国宾中央店", "qty": 16, "owner": "段磊"}, {"value": 304.1, "name": "零满多长安西路店", "qty": 12, "owner": "段磊"}, {"value": 319.6, "name": "零满多福景祥苑店", "qty": 25, "owner": "李帆帆"}, {"value": 430.6, "name": "零满多上塔坡店", "qty": 7, "owner": "高雅静"}, {"value": 430.7, "name": "零满多隆清城店", "qty": 14, "owner": "周彬"}, {"value": 446.7, "name": "零满多锦绣秦川店", "qty": 18, "owner": "张金颖"}, {"value": 492.8, "name": "零满多青年南街店", "qty": 24, "owner": "桓伟"}, {"value": 498.2, "name": "零满多铁安一街店", "qty": 13, "owner": "段磊"}, {"value": 1945.3, "name": "零满多华润二十四城店", "qty": 53, "owner": "张金颖"}], barWidth: '60%',
         itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
                 { offset: 0, color: '#fbbf24' }, { offset: 1, color: '#d97706' }
@@ -888,16 +888,16 @@ xcDayChart.setOption({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: { data: ['订单量', '支付金额'], top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: ["09-01", "09-02", "09-03", "09-04", "09-05", "09-06", "09-07", "09-08", "09-09", "09-10", "09-11", "09-12", "09-13", "09-14", "09-15"] },
+    xAxis: { type: 'category', data: ["09-01", "09-02", "09-03", "09-04", "09-05", "09-06", "09-07", "09-08", "09-09", "09-10", "09-11", "09-12", "09-13", "09-14", "09-15", "09-16", "09-17", "09-18"] },
     yAxis: [
         { type: 'value', name: '订单（单）', minInterval: 1 },
         { type: 'value', name: '金额（元）' }
     ],
     series: [
-        { name: '订单量', type: 'bar', data: [21, 3, 15, 6, 4, 51, 2, 17, 2, 13, 6, 5, 11, 28, 16], barWidth: '32%',
+        { name: '订单量', type: 'bar', data: [21, 3, 15, 6, 4, 51, 2, 17, 2, 13, 6, 5, 11, 28, 16, 4, 15, 4], barWidth: '32%',
           itemStyle: { color: '#f59e0b', borderRadius: [4, 4, 0, 0] },
           label: { show: true, position: 'top' } },
-        { name: '支付金额', type: 'line', yAxisIndex: 1, data: [695.6, 86.6, 352.3, 182.4, 185.6, 1570.6, 31.3, 687.3, 23.4, 332.4, 1277.5, 261.0, 684.8, 506.0, 274.8],
+        { name: '支付金额', type: 'line', yAxisIndex: 1, data: [695.6, 86.6, 352.3, 182.4, 185.6, 1570.6, 31.3, 687.3, 23.4, 332.4, 1277.5, 261.0, 684.8, 506.0, 274.8, 149.7, 174.1, 110.8],
           itemStyle: { color: '#d97706' }, lineStyle: { width: 3 }, smooth: true,
           label: { show: true, formatter: '¥{c}' } }
     ]
@@ -941,10 +941,10 @@ allItemChart.setOption({
     xAxis: { type: 'value', name: '金额（元）' },
     yAxis: { type: 'category', data: ["银桥利乐枕纯牛奶220g × 16", "五得利高筋超精粉六星5kg", "家小美亲肤柔韧无芯卷纸12卷1200g", "鲁花低芥酸特香菜籽油5L", "邦淇非转基因纯香菜籽油5L", "米旗花好月圆450g", "老哥俩稻花香5kg", "米旗锦绣华月600g", "银桥利乐枕核桃花生220g × 16", "米旗喜迎仲秋400g"], axisLabel: { width: 170, overflow: 'truncate' } },
     series: [
-        { name: '有效金额', type: 'bar', stack: 'a', data: [{"value": 167.4, "name": "银桥利乐枕纯牛奶220g × 16", "qty": 7, "orders": 7}, {"value": 190.9, "name": "五得利高筋超精粉六星5kg", "qty": 10, "orders": 9}, {"value": 276.9, "name": "家小美亲肤柔韧无芯卷纸12卷1200g", "qty": 34, "orders": 21}, {"value": 311.6, "name": "鲁花低芥酸特香菜籽油5L", "qty": 4, "orders": 4}, {"value": 321.0, "name": "邦淇非转基因纯香菜籽油5L", "qty": 7, "orders": 4}, {"value": 325.0, "name": "米旗花好月圆450g", "qty": 7, "orders": 4}, {"value": 350.1, "name": "老哥俩稻花香5kg", "qty": 11, "orders": 11}, {"value": 495.0, "name": "米旗锦绣华月600g", "qty": 5, "orders": 3}, {"value": 515.3, "name": "银桥利乐枕核桃花生220g × 16", "qty": 20, "orders": 19}, {"value": 1715.0, "name": "米旗喜迎仲秋400g", "qty": 36, "orders": 10}], barWidth: '58%',
+        { name: '有效金额', type: 'bar', stack: 'a', data: [{"value": 167.4, "name": "银桥利乐枕纯牛奶220g × 16", "qty": 7, "orders": 7}, {"value": 210.8, "name": "五得利高筋超精粉六星5kg", "qty": 11, "orders": 10}, {"value": 276.9, "name": "家小美亲肤柔韧无芯卷纸12卷1200g", "qty": 36, "orders": 23}, {"value": 311.6, "name": "鲁花低芥酸特香菜籽油5L", "qty": 4, "orders": 4}, {"value": 321.0, "name": "邦淇非转基因纯香菜籽油5L", "qty": 7, "orders": 4}, {"value": 325.0, "name": "米旗花好月圆450g", "qty": 7, "orders": 4}, {"value": 350.1, "name": "老哥俩稻花香5kg", "qty": 11, "orders": 11}, {"value": 495.0, "name": "米旗锦绣华月600g", "qty": 5, "orders": 3}, {"value": 546.2, "name": "银桥利乐枕核桃花生220g × 16", "qty": 21, "orders": 20}, {"value": 1831.0, "name": "米旗喜迎仲秋400g", "qty": 38, "orders": 11}], barWidth: '58%',
           itemStyle: { color: '#f59e0b' },
           label: { show: true, position: 'inside', formatter: function(p) { return p.value > 0 ? '¥' + p.value : ''; } } },
-        { name: '已取消金额', type: 'bar', stack: 'a', data: [{"value": 27.9, "name": "银桥利乐枕纯牛奶220g × 16", "qty": 7, "orders": 7}, {"value": 0.0, "name": "五得利高筋超精粉六星5kg", "qty": 10, "orders": 9}, {"value": 26.7, "name": "家小美亲肤柔韧无芯卷纸12卷1200g", "qty": 34, "orders": 21}, {"value": 0.0, "name": "鲁花低芥酸特香菜籽油5L", "qty": 4, "orders": 4}, {"value": 53.5, "name": "邦淇非转基因纯香菜籽油5L", "qty": 7, "orders": 4}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 7, "orders": 4}, {"value": 77.8, "name": "老哥俩稻花香5kg", "qty": 11, "orders": 11}, {"value": 0.0, "name": "米旗锦绣华月600g", "qty": 5, "orders": 3}, {"value": 91.7, "name": "银桥利乐枕核桃花生220g × 16", "qty": 20, "orders": 19}, {"value": 49.0, "name": "米旗喜迎仲秋400g", "qty": 36, "orders": 10}], barWidth: '58%',
+        { name: '已取消金额', type: 'bar', stack: 'a', data: [{"value": 27.9, "name": "银桥利乐枕纯牛奶220g × 16", "qty": 7, "orders": 7}, {"value": 0.0, "name": "五得利高筋超精粉六星5kg", "qty": 11, "orders": 10}, {"value": 46.5, "name": "家小美亲肤柔韧无芯卷纸12卷1200g", "qty": 36, "orders": 23}, {"value": 0.0, "name": "鲁花低芥酸特香菜籽油5L", "qty": 4, "orders": 4}, {"value": 53.5, "name": "邦淇非转基因纯香菜籽油5L", "qty": 7, "orders": 4}, {"value": 130.0, "name": "米旗花好月圆450g", "qty": 7, "orders": 4}, {"value": 77.8, "name": "老哥俩稻花香5kg", "qty": 11, "orders": 11}, {"value": 0.0, "name": "米旗锦绣华月600g", "qty": 5, "orders": 3}, {"value": 91.7, "name": "银桥利乐枕核桃花生220g × 16", "qty": 21, "orders": 20}, {"value": 49.0, "name": "米旗喜迎仲秋400g", "qty": 38, "orders": 11}], barWidth: '58%',
           itemStyle: { color: '#d1d5db', borderRadius: [0, 4, 4, 0] },
           label: { show: true, position: 'right', color: '#9ca3af',
                    formatter: function(p) { return p.value > 0 ? '取消 ¥' + p.value : ''; } } }
